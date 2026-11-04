@@ -1,0 +1,4 @@
+Scenario,Total_Events,Detected_Events,Missed_Events,Event_Detection_Rate_Pct,Incremental_Event_Detection_Rate_Pct,Detection_Delay,Earliest_Detection_Timestamp
+Scenario A - Sudden Spikes,3,3,0,100.0,100.0,0 hours (Immediate detection upon occurrence),2026-03-19 09:00:00
+Scenario B - Gradual Drift,1,1,0,100.0,100.0,"4 hours (Triggered at +3.5 sigma, 5th hour)",2026-03-19 15:00:00
+Scenario C - Relationship Breaking,1,1,0,100.0,100.0,0 hours (Triggered immediately at 1st observation),2026-03-20 06:00:00

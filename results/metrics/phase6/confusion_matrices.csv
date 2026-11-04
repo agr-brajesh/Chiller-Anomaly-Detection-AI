@@ -1,0 +1,4 @@
+Scenario,True_Positive_TP,False_Negative_FN,False_Positive_FP,True_Negative_TN,Clean_Baseline_FP_Contribution,Net_Synthetic_FP
+Scenario A - Sudden Spikes,3,0,2,62,2,0
+Scenario B - Gradual Drift,1,4,2,60,2,0
+Scenario C - Relationship Breaking,3,0,2,62,2,0

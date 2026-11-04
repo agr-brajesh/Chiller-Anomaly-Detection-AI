@@ -131,3 +131,19 @@
   - Evaluate the 2 flagged test observations (Chiller-5 at 02:00 on March 20 and Chiller-4 at 17:00 on March 19).
   - Understand physical sensor contributions (suction temperature and lift temperature deviations).
   - Confirm stop condition: wait for student authorization before proceeding to Phase 6 synthetic anomaly testing.
+
+
+### Entry 9: Phase 6 — Synthetic Anomaly Experiment and Model Evaluation
+- **Date:** 2026-11-04
+- **Task Performed:** Implemented Phase 6 controlled synthetic perturbation experiments (`src/synthetic_experiments_phase6.py`) evaluating the frozen PCA detector ($\tau = 9.2931$) across three independent scenarios: Scenario A (Sudden Spikes, $\pm 4.0\sigma$, 3 single-observation events), Scenario B (Gradual Drift, linearly ramping from $+0.7\sigma$ to $+3.5\sigma$ over 5 hours in Chiller-1), and Scenario C (Temperature-Pressure Relationship Breaking, perturbing `Discharge Pressure Comp 1` by $-3.5\sigma$ over 3 hours while keeping correlated `Discharge Temp Comp 1` untouched, directly targeting the research question). Evaluated observation-level metrics (Precision, Recall, F1, Accuracy, FPR), confusion matrices, event-level detection rates (100% across all 3 scenarios), and detection delays. Generated 7 publication-quality figures, 8 metric CSVs, 6 synthetic datasets/ground-truth files, wrote `documentation/phase6_synthetic_experiment_working.md`, and updated the project notebook.
+- **Nature of Assistance:** Technical mentoring, experimental design of standardized perturbation scenarios, pipeline implementation, explaining the mathematical difference between observation-level recall and event-level detection, generating high-resolution figures, and documenting research question verification.
+- **Code/Explanations Suggested:**
+  - Python script `src/synthetic_experiments_phase6.py`.
+  - Explanation of standardized perturbation: $\Delta z = \pm 4.0$ corresponds directly to $4.0$ training standard deviations in physical units.
+  - Explanation of baseline false positives: the 2 naturally occurring clean test excursions appear as $FP = 2$ under synthetic label $0$, resulting in net synthetic $FP = 0$.
+  - Analysis of Scenario C proving that breaking the $r = +0.9578$ temperature-pressure physical equilibrium causes immediate projection into the 16 residual dimensions, triggering detection on the first affected observation.
+- **Student Independent Review & Decisions:**
+  - Review the injection manifest and verify within-chiller chronological continuity.
+  - Review observation-level vs event-level performance trade-offs in gradual drift (20% observation recall vs 100% event detection).
+  - Review empirical proof directly answering the assigned research question.
+  - Confirm stop condition: hold progress until Phase 6 is reviewed and approved.

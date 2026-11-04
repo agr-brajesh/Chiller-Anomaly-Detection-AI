@@ -1,0 +1,2 @@
+Scenario,Total_Obs,Positives_True,Negatives_True,TP,TN,FP,FN,Precision,Recall,F1_Score,Accuracy,FPR
+Scenario B - Gradual Drift,67,5,62,1,60,2,4,0.3333,0.2,0.25,0.9104,0.0323
