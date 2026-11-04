@@ -1,0 +1,6 @@
+Event_ID,Scenario,Chiller_ID,Start_Timestamp,End_Timestamp,Duration_Hours,Affected_Feature,Category,Magnitude_Sigma,Direction,Observations_Modified,Clean_Baseline_SPE
+SPIKE_01,Scenario A - Sudden Spike,Chiller - 1,2026-03-19 09:00:00,2026-03-19 09:00:00,1,Discharge Temperature Deg C Comp 1,Temperature,4.0,Positive,1,0.8654
+SPIKE_02,Scenario A - Sudden Spike,Chiller - 4,2026-03-19 13:00:00,2026-03-19 13:00:00,1,Discharge Pressure Kg /cm 2 Comp 1,Pressure,4.0,Positive,1,1.7660
+SPIKE_03,Scenario A - Sudden Spike,Chiller - 1,2026-03-19 22:00:00,2026-03-19 22:00:00,1,Suction Temperature Deg C,Temperature,-4.0,Negative,1,1.2880
+DRIFT_01,Scenario B - Gradual Drift,Chiller - 1,2026-03-19 11:00:00,2026-03-19 15:00:00,5,Evaporator Water Out Temperature Deg C,Temperature,Max 3.5,Positive Linear Ramp (+0.7 to +3.5 sigma),5,2.05 to 2.32
+REL_BREAK_01,Scenario C - Relationship Breaking,Chiller - 1,2026-03-20 06:00:00,2026-03-20 08:00:00,3,Discharge Pressure Kg /cm 2 Comp 1,Pressure,-3.5,Negative Pressure Perturbation (-3.5 sigma),3,1.52 to 1.70

@@ -1,0 +1,5 @@
+CHILLER_TAG,Val_Obs_Count,Val_Obs_Pct,Val_Mean_SPE,Val_Median_SPE,Val_Mean_T2,Test_Obs_Count,Test_Obs_Pct,Test_Mean_SPE,Test_Median_SPE,Test_Mean_T2,Test_Flagged_Count,Test_Flagged_Pct,Fleet_Mix_Note
+Chiller - 1,19,20.65,1.3709,0.56,12.28,34,50.75,0.5782,0.5009,10.1,0,0.0,Significant test representation increase (Chiller-1)
+Chiller - 3,30,32.61,1.114,0.4473,13.6,6,8.96,0.5873,0.3373,8.73,0,0.0,Operational unit
+Chiller - 4,33,35.87,0.4145,0.215,10.16,15,22.39,0.9859,0.3936,9.89,1,6.67,Operational unit
+Chiller - 5,10,10.87,1.0646,0.5215,26.59,12,17.91,1.4062,0.5923,12.11,1,8.33,Operational unit

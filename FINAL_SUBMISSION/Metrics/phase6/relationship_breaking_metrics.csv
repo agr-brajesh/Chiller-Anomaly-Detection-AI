@@ -1,0 +1,2 @@
+Scenario,Total_Obs,Positives_True,Negatives_True,TP,TN,FP,FN,Precision,Recall,F1_Score,Accuracy,FPR
+Scenario C - Relationship Breaking,67,3,64,3,62,2,0,0.6,1.0,0.75,0.9701,0.0312

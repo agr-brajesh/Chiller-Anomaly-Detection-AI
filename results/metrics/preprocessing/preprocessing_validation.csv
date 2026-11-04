@@ -1,19 +1,11 @@
-Validation_Check,Expected,Observed,Status
-Expected Feature Count,28,28,PASS
-Train Partition Row Count,358,358,PASS
-Validation Partition Row Count,92,92,PASS
-Test Partition Row Count,67,67,PASS
-Total Partitioned Observations,517,517,PASS
-Missing Values in Train Features,0,0,PASS
-Missing Values in Val Features,0,0,PASS
-Missing Values in Test Features,0,0,PASS
-Infinite Values in Train Features,0,0,PASS
-Infinite Values in Val Features,0,0,PASS
-Infinite Values in Test Features,0,0,PASS
-Training Scaled Mean Approx Zero,< 1e-4,4.62e-15,PASS
-Training Scaled Std Approx One,1.0000,1.0014,PASS
-Temporal Leakage Prevention (Train End < Val Start),True,True,PASS
-Temporal Leakage Prevention (Val End < Test Start),True,True,PASS
-Chiller Identity Excluded from PCA Matrix,True,True,PASS
-Timestamp Excluded from PCA Matrix,True,True,PASS
-Raw Source Workbook Modified,False,False (Untouched),PASS
+Validation_Check,Condition,Observed,Status
+Train Shape Exact Match,"N=358, P=28","(358, 28)",Passed
+Validation Shape Exact Match,"N=92, P=28","(92, 28)",Passed
+Test Shape Exact Match,"N=67, P=28","(67, 28)",Passed
+Zero Null Values in Train,Sum of NaNs == 0,0,Passed
+Zero Null Values in Validation,Sum of NaNs == 0,0,Passed
+Zero Null Values in Test,Sum of NaNs == 0,0,Passed
+Train Standardized Mean ~ 0,All |Mean| < 1e-4,Max |Mean|: 4.62e-15,Passed
+Train Standardized Std ~ 1,All |Std(ddof=0) - 1.0| < 1e-4,Max |Std - 1|: 2.22e-16,Passed
+Anti-Data-Leakage Fitting Verification,Transformers fitted strictly on train,Imputer and Scaler fitted strictly on df_train,Passed
+Temporal Ordering Verification,Train End < Val Start < Test Start,2026-03-17 10:00:00 < 2026-03-17 11:00:00 < 2026-03-18 20:00:00,Passed

@@ -1,6 +1,7 @@
-Candidate_Strategy,Components_Retained_k,Dimensions_Removed_Residuals,Cumulative_Explained_Variance_Pct,Residual_Unexplained_Variance_Pct,Detection_Tradeoff_Analysis
-Kaiser Criterion (Lambda >= 1.0),8,20,72.33,27.67,Conservative dimension reduction. Leaves 27.67% variance in residuals; risks higher normal validation SPE noise.
-80% Cumulative Variance,11,17,82.5,17.5,Good compression (k=11). Retains 17 residual dimensions for anomaly projection.
-85% Cumulative Variance (Recommended),12,16,85.46,14.54,RECOMMENDED: Captures 85.46% of core thermodynamic covariance while reserving 16 orthogonal residual dimensions to catch decoupled anomaly vectors.
-90% Cumulative Variance,14,14,90.85,9.15,High retention (k=14). Leaves 14 residual dimensions. Good fit for low-noise systems.
-95% Cumulative Variance,17,11,95.67,4.33,High component count (k=17). Only 11 residual dimensions remain; risks reconstructing subtle anomalies inside the model.
+Candidate_Strategy,Components_Retained_k,Dimensions_Removed_Residuals,Cumulative_Explained_Variance_Pct,Residual_Unexplained_Variance_Pct,Smallest_Eigenvalue_Lambda,Detection_Tradeoff_Analysis
+Kaiser Strict Boundary (λ >= 1.0),6,22,87.18,12.82,1.2819,"Strict Kaiser cutoff: compact 6D subspace, 12.82% variance in residuals."
+Kaiser Scree Elbow (k = 8),8,20,92.72,7.28,0.6629,"Kaiser Elbow: 92.72% variance, 20 residual dimensions for high SPE sensitivity."
+"High Fidelity (k = 10, ~95% Variance)",10,18,95.77,4.23,0.3305,"95% variance benchmark: 18 residual dimensions, balanced sensitivity."
+"Selected Primary Model (k = 12, ~97.5% Variance)",12,16,97.46,2.54,0.1836,"SELECTED PRIMARY: 97.46% variance, captures dual-compressor cross-coupling while preserving 16 residual dimensions for sharp orthogonal fault isolation."
+"Very High Retention (k = 14, ~98.3% Variance)",14,14,98.34,1.66,0.0964,High retention: 14 residual dimensions remaining.
+"Ultra-High Retention (k = 17, ~99% Variance)",17,11,99.06,0.94,0.0529,Over-reconstruction risk: only 11 residual dimensions; risks absorbing localized sensor faults into PC subspace.

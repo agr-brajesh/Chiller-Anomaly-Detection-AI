@@ -1,0 +1,5 @@
+{
+  "ROC_AUC": 0.9705,
+  "PR_AUC": 0.7263,
+  "Primary_Threshold_SPE": 4.2703
+}

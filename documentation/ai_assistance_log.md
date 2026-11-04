@@ -166,7 +166,7 @@
 
 ### Entry 11: Phase 8 — Final Case Study Documentation and Submission Preparation
 - **Date:** 2026-11-04
-- **Task Performed:** Comprehensive final audit across all 8 phases; finalized technical documentation (`preprocessing_notes.md`, `model_configuration.md`, `evaluation_and_interpretation.md`, `viva_preparation.md`); verified master Jupyter notebook (`notebooks/Chiller_PCA_Anomaly_Detection.ipynb`, 45 cells); programmatically generated structured Microsoft Word case study report template (`Case_Study_Report_Template.docx`, 5–8 page outline with verified tables, placeholders, and academic writing guidance); programmatically generated Microsoft PowerPoint presentation template (`presentation/Chiller_Anomaly_Detection_Template.pptx`, 12 widescreen slides with embedded final charts); assembled clean submission hierarchy (`FINAL_SUBMISSION/`) and created archive package (`FINAL_SUBMISSION_24BCE0551.zip`, 4.99 MB); conducted cross-document numerical audit; generated final submission audit report (`final_submission_audit.md`).
+- **Task Performed:** Comprehensive final audit across all 8 phases; finalized technical documentation (`preprocessing_notes.md`, `model_configuration.md`, `evaluation_and_interpretation.md`, `viva_preparation.md`); verified master Jupyter notebook (`notebooks/Chiller_PCA_Anomaly_Detection.ipynb`); programmatically generated structured Microsoft Word case study report template (`Case_Study_Report_Template.docx`, 5–8 page outline with verified tables, placeholders, and academic writing guidance); programmatically generated Microsoft PowerPoint presentation template (`presentation/Chiller_Anomaly_Detection_Template.pptx`, 12 widescreen slides with embedded final charts); assembled clean submission hierarchy (`FINAL_SUBMISSION/`) and created archive package (`FINAL_SUBMISSION_24BCE0551.zip`); conducted cross-document numerical audit; generated final submission audit report (`final_submission_audit.md`).
 - **Nature of Assistance:** Technical auditor, documentation organizer, script developer (`generate_report_docx.py`, `generate_presentation_pptx.py`, `assemble_submission.py`), viva learning guide author, and submission packager.
 - **Academic Integrity Compliance:**
   - AI did NOT ghostwrite the final academic report or presentation script. Structured templates with placeholders and verified numerical tables were provided for the student to write their own independent narrative.
@@ -176,3 +176,22 @@
   - Student independently writes their 5–8 page report in Word by replacing placeholders in `Case_Study_Report_Template.docx`.
   - Student customizes speaker notes in `Chiller_Anomaly_Detection_Template.pptx`.
   - Student reviews the 12 viva topics in `viva_preparation.md` for oral defense.
+
+
+### Entry 12: Comprehensive 8-Point Methodological and Data Cleaning Overhaul
+- **Date:** 2026-11-04
+- **Task Performed:** Systematic resolution of 8 critical technical and methodological issues identified by the student across the entire pipeline:
+  1. *Physical Plausibility Screening:* Established thermodynamic boundary rules for R134a chiller operations; masked 16 training typos and 1 validation typo to NaN; performed strict training-fitted median imputation via `SimpleImputer`, eliminating 35.2x artificial variance inflation in `Liquid Temp Comp 1` (std dropped from 35.33 to 1.00 °C).
+  2. *Validation Threshold De-biasing:* Cleaned Row 86 (322 °C saturation temp typo); established uncorrupted validation thresholds ($\tau_{\text{SPE}} = 4.2703$); eliminated all "Provisional" labels.
+  3. *Randomized Multi-Trial Benchmark:* Implemented 200 randomized Monte Carlo trials per perturbation magnitude ($1.0\sigma, 2.0\sigma, 3.0\sigma, 4.0\sigma$) with `np.random.seed(42)` and 95% binomial confidence intervals.
+  4. *Dynamic Computation:* Completely eliminated hard-coded performance values, dynamically calculating all metrics, delays, and false alarm counts from data arrays.
+  5. *Dual MSPC & Time-Series Monitoring:* Implemented Hotelling's $T^2$ ($T^2 = \sum t_j^2 / \lambda_j$) and Exponentially Weighted Moving Average (EWMA on SPE with $\lambda = 0.20$), fulfilling the "Time-Series Detection" track mandate.
+  6. *k Selection Sensitivity Analysis:* Re-evaluated explained variance spectrum on cleaned data (97.46% variance at $k=12$ vs 85.46% on noisy data); compiled sensitivity table for $k \in \{6, 8, 10, 12, 14, 16, 17\}$.
+  7. *Reclassification of Baseline Excursions:* Reclassified the 2 test flags (Index 38 on Chiller-4, Index 54 on Chiller-5) as genuine candidate operational excursions based on sensor contribution analysis; prioritized Precision, Recall, F1, and PR/ROC curves over accuracy.
+  8. *Fleet Mix Shift & Notebook Hygiene:* Documented Chiller-1 composition shift (12.3% train -> 50.7% test); re-rendered all figures with print & grayscale friendly line styles, markers, and patterns; executed master Jupyter notebook end-to-end with all 16 code cells showing verified saved outputs.
+- **Nature of Assistance:** Technical mentor, statistical reviewer, algorithm implementation assistant, and documentation updater.
+- **Student Verification & Oversight:**
+  - Reviewed and approved physical bounding rules.
+  - Verified that all raw datasets remained untouched.
+  - Inspected end-to-end execution of notebook and verified all 16 cell outputs.
+  - Confirmed transparency in academic assistance documentation.

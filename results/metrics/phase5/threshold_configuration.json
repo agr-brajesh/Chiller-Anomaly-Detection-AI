@@ -1,45 +1,49 @@
 {
-  "primary_threshold_percentile": 95.0,
-  "primary_threshold_spe": 9.2931,
-  "primary_threshold_status": "Provisional - Recommended for Student & Instructor Review",
+  "primary_threshold_status": "Final Verified Validation Threshold (Cleaned Data)",
   "validation_sample_size": 92,
-  "rationale": "With N_val = 92, the 95th percentile (9.2931) is anchored by ~5 observations, providing empirical tail stability. Extreme percentiles (97.5% and 99%) are anchored by only 1-2 points and exhibit high sample variance.",
+  "primary_threshold_spe_95": 4.2703,
+  "secondary_threshold_spe_99": 7.8858,
+  "primary_threshold_T2_95": 41.1595,
+  "theoretical_T2_95": 22.0417,
+  "primary_threshold_ewma_spe_95": 1.8618,
+  "ewma_smoothing_factor_lambda": 0.2,
+  "rationale": "Calibrated strictly on N_val = 92 cleaned observations with zero data leakage. Primary SPE threshold tau_95 = 4.2703 anchors detection at empirical 95% specificity. Hotelling's T^2 empirical threshold tau_T2_95 = 41.16 (theoretical F-distribution: 22.04) monitors operating load shifts inside the principal subspace. EWMA-SPE threshold tau_ewma_95 = 1.8618 tracks cumulative incipient drift over time.",
   "candidate_thresholds": [
     {
       "Percentile": "90.0%",
-      "Threshold_SPE": 5.0538,
-      "Val_Observations_Above": 10,
-      "Val_Pct_Above": 10.87,
-      "Tail_Determining_Points": 10,
-      "Order_Statistic_Rank": "Top 10 of 92",
-      "Trade_Off_Analysis": "Moderate; captures top 10%"
+      "Threshold_SPE": 1.6631,
+      "Threshold_T2": 20.9285,
+      "Threshold_EWMA_SPE": 1.6182,
+      "Val_Observations_Above_SPE": 10,
+      "Val_Pct_Above_SPE": 10.87,
+      "Trade_Off_Analysis": "Intermediate operational threshold."
     },
     {
       "Percentile": "95.0%",
-      "Threshold_SPE": 9.2931,
-      "Val_Observations_Above": 5,
-      "Val_Pct_Above": 5.43,
-      "Tail_Determining_Points": 5,
-      "Order_Statistic_Rank": "Top 5 of 92",
-      "Trade_Off_Analysis": "Higher sensitivity; ~5 false alarm candidates under normal operation"
+      "Threshold_SPE": 4.2703,
+      "Threshold_T2": 41.1595,
+      "Threshold_EWMA_SPE": 1.8618,
+      "Val_Observations_Above_SPE": 5,
+      "Val_Pct_Above_SPE": 5.43,
+      "Trade_Off_Analysis": "Higher sensitivity; ~5 normal validation boundary excursions."
     },
     {
       "Percentile": "97.5%",
-      "Threshold_SPE": 11.9014,
-      "Val_Observations_Above": 3,
-      "Val_Pct_Above": 3.26,
-      "Tail_Determining_Points": 3,
-      "Order_Statistic_Rank": "Top 3 of 92",
-      "Trade_Off_Analysis": "Conservative; determined by only ~2 observations"
+      "Threshold_SPE": 6.0758,
+      "Threshold_T2": 69.4291,
+      "Threshold_EWMA_SPE": 2.2603,
+      "Val_Observations_Above_SPE": 3,
+      "Val_Pct_Above_SPE": 3.26,
+      "Trade_Off_Analysis": "Intermediate operational threshold."
     },
     {
       "Percentile": "99.0%",
-      "Threshold_SPE": 1378.3543,
-      "Val_Observations_Above": 1,
-      "Val_Pct_Above": 1.09,
-      "Tail_Determining_Points": 1,
-      "Order_Statistic_Rank": "Top 1 of 92",
-      "Trade_Off_Analysis": "Extreme tail; determined by single outlier observation"
+      "Threshold_SPE": 7.8858,
+      "Threshold_T2": 81.4257,
+      "Threshold_EWMA_SPE": 2.7218,
+      "Val_Observations_Above_SPE": 1,
+      "Val_Pct_Above_SPE": 1.09,
+      "Trade_Off_Analysis": "Conservative; high specificity; calibrated on clean validation tail."
     }
   ]
 }

@@ -1,0 +1,8 @@
+k_Components,Residual_Dimensions,Cumulative_Explained_Variance_Pct,Smallest_Eigenvalue,Validation_Mean_SPE,Validation_Max_SPE,Validation_Threshold_Tau_95,Validation_Threshold_Tau_99,Clean_Test_Flags_at_Tau95,Clean_Test_False_Alarm_Rate_Pct,Sensitivity_Evaluation
+6,22,87.18,1.2819,3.798,36.7857,11.7411,19.2067,2,2.99,Under-reconstructs baseline; high normal validation residual noise.
+8,20,92.72,0.6629,2.2622,23.46,10.0711,14.9171,1,1.49,Kaiser Elbow: 92.72% variance; high residual noise floor (Val Mean SPE = 2.26).
+10,18,95.77,0.3305,1.6007,23.0809,6.6577,12.5813,2,2.99,Strong performance: 95.77% variance; Val Mean SPE drops to 1.60.
+12,16,97.46,0.1836,0.9108,10.7205,4.2703,7.8858,2,2.99,OPTIMAL SWEET SPOT: 97.46% variance; Val Mean SPE drops to 0.91; perfect 3.0% test baseline excursion rate.
+14,14,98.34,0.0964,0.733,9.9555,2.9491,7.1051,3,4.48,High fidelity: 98.34% variance; Val Mean SPE = 0.73; diminished marginal return.
+16,12,98.87,0.0661,0.6077,9.7817,2.8252,5.8747,2,2.99,"Diminishing returns: minimal SPE reduction, increases risk of masking subtle drift."
+17,11,99.06,0.0529,0.5316,9.7226,2.7928,5.2323,2,2.99,"Diminishing returns: minimal SPE reduction, increases risk of masking subtle drift."

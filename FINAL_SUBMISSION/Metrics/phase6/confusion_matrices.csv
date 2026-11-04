@@ -1,0 +1,5 @@
+Scenario,TP,FN,FP,TN,Baseline_Operational_Excursions,Net_Synthetic_FP
+Scenario A - Sudden Spikes (+-4.0 sigma),3,0,2,62,2,0
+Scenario B - Gradual Drift (Point SPE),3,4,2,58,2,0
+Scenario B - Gradual Drift (EWMA Time-Series),3,4,6,54,2,4
+Scenario C - Relationship Breaking,3,0,2,62,2,0

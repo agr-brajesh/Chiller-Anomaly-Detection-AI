@@ -1,0 +1,11 @@
+Validation_Check,Condition,Observed,Status
+Train Shape Exact Match,"N=358, P=28","(358, 28)",Passed
+Validation Shape Exact Match,"N=92, P=28","(92, 28)",Passed
+Test Shape Exact Match,"N=67, P=28","(67, 28)",Passed
+Zero Null Values in Train,Sum of NaNs == 0,0,Passed
+Zero Null Values in Validation,Sum of NaNs == 0,0,Passed
+Zero Null Values in Test,Sum of NaNs == 0,0,Passed
+Train Standardized Mean ~ 0,All |Mean| < 1e-4,Max |Mean|: 4.62e-15,Passed
+Train Standardized Std ~ 1,All |Std(ddof=0) - 1.0| < 1e-4,Max |Std - 1|: 2.22e-16,Passed
+Anti-Data-Leakage Fitting Verification,Transformers fitted strictly on train,Imputer and Scaler fitted strictly on df_train,Passed
+Temporal Ordering Verification,Train End < Val Start < Test Start,2026-03-17 10:00:00 < 2026-03-17 11:00:00 < 2026-03-18 20:00:00,Passed

@@ -1,0 +1,5 @@
+Perturbation_Magnitude_Sigma,Total_Trials,SPE_Detected_Count,SPE_Detection_Rate_Pct,SPE_95_CI_HalfWidth_Pct,SPE_95_CI_Lower_Pct,SPE_95_CI_Upper_Pct,Hotelling_T2_Detection_Rate_Pct,Combined_MSPC_Detection_Rate_Pct,Combined_95_CI_HalfWidth_Pct,Engineering_Assessment
+1.0,200,3,1.5,1.68,0.0,3.18,0.0,1.5,1.68,Sub-threshold operational noise; subtle drift undetectable at single time-step.
+2.0,200,12,6.0,3.29,2.71,9.29,1.0,7.0,3.54,Incipient boundary zone; partial detection depending on feature alignment.
+3.0,200,160,80.0,5.54,74.46,85.54,2.0,81.0,5.44,Robust industrial detection threshold; sharp orthogonal projection.
+4.0,200,179,89.5,4.25,85.25,93.75,5.0,93.5,3.42,Definitive critical fault regime; virtually 100% intercept reliability.

@@ -1,0 +1,5 @@
+Percentile,Threshold_SPE,Threshold_T2,Threshold_EWMA_SPE,Val_Observations_Above_SPE,Val_Pct_Above_SPE,Trade_Off_Analysis
+90.0%,1.6631,20.9285,1.6182,10,10.87,Intermediate operational threshold.
+95.0%,4.2703,41.1595,1.8618,5,5.43,Higher sensitivity; ~5 normal validation boundary excursions.
+97.5%,6.0758,69.4291,2.2603,3,3.26,Intermediate operational threshold.
+99.0%,7.8858,81.4257,2.7218,1,1.09,Conservative; high specificity; calibrated on clean validation tail.

@@ -1,4 +1,5 @@
-Scenario,Total_Obs,Positives_True,Negatives_True,TP,TN,FP,FN,Precision,Recall,F1_Score,Accuracy,FPR
-Scenario A - Sudden Spikes,67,3,64,3,62,2,0,0.6,1.0,0.75,0.9701,0.0312
-Scenario B - Gradual Drift,67,5,62,1,60,2,4,0.3333,0.2,0.25,0.9104,0.0323
-Scenario C - Relationship Breaking,67,3,64,3,62,2,0,0.6,1.0,0.75,0.9701,0.0312
+Scenario,Total_Obs,True_Positives_TP,True_Negatives_TN,False_Positives_FP,False_Negatives_FN,Precision,Recall,F1_Score,Accuracy_Demoted,False_Positive_Rate_FPR,Clean_Baseline_Excursions
+Scenario A - Sudden Spikes (+-4.0 sigma),67,3,62,2,0,0.6,1.0,0.75,0.9701,0.0312,2
+Scenario B - Gradual Drift (Point SPE),67,3,58,2,4,0.6,0.4286,0.5,0.9104,0.0333,2
+Scenario B - Gradual Drift (EWMA Time-Series),67,3,54,6,4,0.3333,0.4286,0.375,0.8507,0.1,2
+Scenario C - Relationship Breaking,67,3,62,2,0,0.6,1.0,0.75,0.9701,0.0312,2

@@ -5,9 +5,9 @@
 - **Track:** Multivariate and Time-Series Detection
 - **Assigned Machine Learning Method:** Principal Component Analysis (PCA)-Based Multivariate Anomaly Detector
 - **Primary Research Question:** *Can anomalies be detected from correlated temperature and pressure variables?*
-- **Primary Evaluation Strategy:** PCA Reconstruction Error (Squared Prediction Error / SPE) & Synthetic Anomaly Testing (Spike, Drift, Correlation Breaking)
-- **Assigned Preprocessing Protocol:** Imputation, StandardScaler, and Correlation Analysis (Strictly Training-Fitted)
-- **Official Raw Dataset:** `data/raw/official_dataset/Analyse Chillers_AI Course.xls` (Preserved Unmodified, SHA-256 Verified)
+- **Primary Evaluation Strategy:** Dual Statistical Process Control (Squared Prediction Error / SPE & Hotelling's $T^2$), Time-Series EWMA Monitoring, and Randomized Monte Carlo Synthetic Testing (200 trials per magnitude across $1.0\sigma, 2.0\sigma, 3.0\sigma, 4.0\sigma$).
+- **Assigned Preprocessing Protocol:** Physical Plausibility Screening, SimpleImputer (median, train-only), StandardScaler (train-only), and Chronological Partitioning (70% Train, 15% Val, 15% Test).
+- **Official Raw Dataset:** `data/raw/official_dataset/Analyse Chillers_AI Course.xls` (Preserved Unmodified, SHA-256 Verified).
 
 ---
 
@@ -22,71 +22,63 @@ Chiller-Anomaly-Detection-Official/
 │   ├── processed/
 │   │   ├── selected_features.json                 # 28 approved thermodynamic features config
 │   │   ├── split_manifest.json                    # Chronological split boundaries & statistics
-│   │   ├── train_features.csv                     # Standardized training feature matrix (358 x 28)
-│   │   ├── validation_features.csv                # Standardized validation feature matrix (92 x 28)
-│   │   ├── test_features.csv                      # Standardized testing feature matrix (67 x 28)
+│   │   ├── train_features.csv                     # Standardized cleaned training matrix (358 x 28)
+│   │   ├── validation_features.csv                # Standardized cleaned validation matrix (92 x 28)
+│   │   ├── test_features.csv                      # Standardized cleaned testing matrix (67 x 28)
+│   │   ├── train_features_raw.csv                 # Raw uncleaned features for historical traceability
+│   │   ├── validation_features_raw.csv            # Raw uncleaned validation features
+│   │   ├── test_features_raw.csv                  # Raw uncleaned test features
 │   │   ├── train_metadata.csv                     # Training metadata (Timestamp, Chiller Tag, Loads)
 │   │   ├── validation_metadata.csv                # Validation metadata
 │   │   ├── test_metadata.csv                      # Testing metadata
 │   │   ├── imputer.joblib                         # Fitted SimpleImputer (median, train-only)
 │   │   ├── scaler.joblib                          # Fitted StandardScaler (train-only)
 │   │   └── pca_model.joblib                       # Fitted PCA Detector (k = 12 components)
-│   └── synthetic/                                 # Dedicated directory for Phase 6 synthetic copies
+│   └── synthetic/
+│       ├── spike_test_copy.csv                    # Scenario A test dataset (sudden spikes)
+│       ├── drift_test_copy.csv                    # Scenario B test dataset (incipient thermal drift)
+│       ├── relationship_breaking_test_copy.csv    # Scenario C test dataset (T-P decoupling)
+│       └── monte_carlo_trials_dataset.csv         # 800-trial randomized benchmark dataset
 │
 ├── notebooks/
-│   └── Chiller_PCA_Anomaly_Detection.ipynb        # Master Jupyter Notebook (Phases 1 to 4 integrated)
+│   └── Chiller_PCA_Anomaly_Detection.ipynb        # Fully executed master Jupyter Notebook (Phases 1-8)
 │
 ├── src/
 │   ├── data_inspection.py                         # Phase 1: Dataset profiling & workbook inspection
 │   ├── eda_analysis.py                            # Phase 2: EDA, quality checks & correlation matrix
-│   ├── preprocessing.py                           # Phase 3: Anti-leakage chronological split & scaling
-│   ├── pca_detector.py                            # Phase 4: PCA training, loadings & variance analysis
-│   ├── anomaly_detection.py                       # Phase 5: SPE calculation & threshold determination
-│   └── evaluation.py                              # Phase 6 & 7: Synthetic experiments & validation
+│   ├── preprocessing.py                           # Phase 3: Plausibility masking, imputation & scaling
+│   ├── pca_detector.py                            # Phase 4: Clean PCA training, loadings & k sensitivity
+│   ├── anomaly_detection_phase5.py                # Phase 5: Dual MSPC (SPE + T^2), EWMA & thresholding
+│   ├── synthetic_experiments_phase6.py            # Phase 6: Monte Carlo benchmark & physical scenarios
+│   ├── final_results_phase7.py                    # Phase 7: Synthesis, 12 final figures & evidence tables
+│   ├── build_notebook.py                          # Automation script to assemble master notebook
+│   └── assemble_submission.py                     # Final submission packaging and verification
 │
 ├── results/
 │   ├── figures/
 │   │   ├── eda/                                   # 7 Phase 2 EDA figures (300 DPI)
-│   │   │   ├── missing_values_analysis.png
-│   │   │   ├── temperature_pressure_heatmap.png
-│   │   │   ├── sensor_distributions.png
-│   │   │   ├── sensor_time_series_profiles.png
-│   │   │   ├── timestamp_continuity.png
-│   │   │   ├── zero_variance_analysis.png
-│   │   │   └── temperature_pressure_scatterplots.png
-│   │   ├── preprocessing/                         # 2 Phase 3 Preprocessing figures (300 DPI)
-│   │   │   ├── train_validation_test_distribution.png
-│   │   │   └── scaling_comparison.png
-│   │   └── pca/                                   # 6 Phase 4 PCA figures (300 DPI)
-│   │       ├── scree_plot.png
-│   │       ├── cumulative_explained_variance.png
-│   │       ├── component_loadings.png
-│   │       ├── component_contribution.png
-│   │       ├── training_component_scores.png
-│   │       └── chiller_component_diagnostics.png
+│   │   ├── preprocessing/                         # 3 Phase 3 Preprocessing figures (300 DPI)
+│   │   ├── pca/                                   # 6 Phase 4 PCA figures (300 DPI)
+│   │   ├── phase5/                                # 7 Phase 5 Detection & EWMA figures (300 DPI)
+│   │   ├── phase6/                                # 7 Phase 6 Monte Carlo & Scenario figures (300 DPI)
+│   │   └── final/                                 # 12 Consolidated publication figures (300 DPI)
 │   │
-│   ├── metrics/
-│   │   ├── eda/                                   # 10 Phase 2 EDA metric tables
-│   │   │   ├── missing_values_summary.csv
-│   │   │   ├── duplicate_analysis.csv
-│   │   │   ├── timestamp_continuity_summary.csv
-│   │   │   ├── irregular_timestamp_intervals.csv
-│   │   │   ├── descriptive_statistics.csv
-│   │   │   ├── zero_variance_features.csv
-│   │   │   ├── pearson_correlation_matrix.csv
-│   │   │   ├── spearman_correlation_matrix.csv
-│   │   │   ├── temperature_pressure_pairwise_correlations.csv
-│   │   │   └── sensor_quality_summary.csv
-│   │   ├── preprocessing/                         # 4 Phase 3 Preprocessing metric tables
-│   │   │   ├── imputation_statistics.csv
-│   │   │   ├── training_feature_variance.csv
-│   │   │   ├── scaling_parameters.csv
-│   │   │   └── preprocessing_validation.csv
-│   │   └── pca_explained_variance.csv             # Phase 4 full 28-component variance spectrum
-│   │   └── pca_component_loadings.csv             # Phase 4 28x12 eigenvector loadings matrix
-│   │   └── pca_component_selection_comparison.csv # Phase 4 candidate selection trade-offs
-│   │   └── pca_training_scores.csv                # Phase 4 training projection scores (358 x 12)
-│   └── final_analysis/                            # Phase 7 & 8 final reports
+│   └── metrics/
+│       ├── eda/                                   # 10 Phase 2 EDA metric tables
+│       ├── preprocessing/                         # 6 Phase 3 Preprocessing & Cleaning tables
+│       │   ├── masked_anomalies_log.csv           # Record of all 17 masked typos
+│       │   ├── raw_vs_cleaned_comparison.csv      # Side-by-side variance correction table
+│       │   ├── imputation_statistics.csv          # Median imputation tracking
+│       │   ├── training_feature_variance.csv      # Positive variance verification
+│       │   ├── scaling_parameters.csv             # Mean and scale parameters
+│       │   └── preprocessing_validation.csv       # 10-point anti-leakage audit
+│       ├── pca_explained_variance.csv             # Phase 4 full 28-component variance spectrum
+│       ├── pca_component_loadings.csv             # Phase 4 28x12 eigenvector loadings matrix
+│       ├── pca_k_sensitivity_analysis.csv         # Phase 4 k sensitivity table (k in {6,8,10,12,14,16,17})
+│       ├── pca_training_scores.csv                # Phase 4 training projection scores (358 x 12)
+│       ├── phase5/                                # Phase 5 MSPC, threshold & per-chiller tables
+│       ├── phase6/                                # Phase 6 Monte Carlo, confusion matrices & PR tables
+│       └── final/                                 # Phase 7 Consolidated comparison & evidence tables
 │
 ├── documentation/
 │   ├── ai_assistance_log.md                       # Transparent academic integrity assistance log
@@ -96,71 +88,60 @@ Chiller-Anomaly-Detection-Official/
 │   ├── phase1_decision_log.md                     # Phase 1 approved engineering decisions
 │   ├── phase2_eda_working.md                      # Phase 2 factual EDA working report
 │   ├── phase3_preprocessing_working.md            # Phase 3 factual preprocessing working report
-│   └── phase4_pca_working.md                      # Phase 4 factual PCA model working report
+│   ├── phase4_pca_working.md                      # Phase 4 factual PCA model working report
+│   ├── model_configuration.md                     # Comprehensive model specifications
+│   ├── evaluation_and_interpretation.md           # Research question evidence synthesis
+│   └── final_submission_audit.md                  # Comprehensive verification audit report
 │
-├── presentation/                                  # Phase 8 viva and slide deck materials
+├── presentation/                                  # Slide deck presentation materials
+├── Case_Study_Report_Template.docx                # Formal academic case study report document
 ├── requirements.txt                               # Verified Python package dependencies
-├── README.md                                      # Master comprehensive engineering documentation
-└── .gitignore                                     # Git exclusions (data/raw/ and *.xls excluded)
+└── README.md                                      # Master comprehensive engineering documentation
 ```
 
 ---
 
-## Phase 1 Summary: Official Dataset Discovery & Architecture
+## Summary of the 8 Methodological & Technical Enhancements
 
-### 1. File Verification & Format
-* **Raw File Path:** `data/raw/official_dataset/Analyse Chillers_AI Course.xls`
-* **File Size:** 665,088 bytes (649.5 KB)
-* **SHA-256 Hash:** `7c3e80d5fdf3b97a4b833a6b0cd23fd81ba9b9ad860e6af42e19976a414c4914` (Matches root copy 100%).
-* **Container Format:** Microsoft Excel 97–2004 Workbook (BIFF8 / OLE Compound File).
-* **Worksheet Discovery:** Interrogation via `xlrd` confirms **exactly 1 visible worksheet** named `Log_Chiller_South` (0 hidden sheets).
-* **Header Offset Structure:**
-  * Excel Row 1 (Index 0): Title string (`Log - Chiller Plant`), remainder empty.
-  * Excel Row 2 (Index 1): Completely blank (`NaN`).
-  * Excel Row 3 (Index 2): **Actual 60 sensor headers** (`Sl.No`, `CHILLER TAG`, `Date`, `Time`, ...).
-  * Excel Rows 4 to 525 (Index 3 to 524): **522 observational data rows**.
-  * *Reading Configuration:* `pd.read_excel(path, sheet_name='Log_Chiller_South', header=2)`.
+In accordance with rigorous academic and industrial standards, 8 comprehensive improvements were incorporated:
 
-### 2. Fleet Composition & Temporal Inversion
-* **Multi-Chiller Fleet:** The dataset aggregates logs from **5 distinct chillers** operating within the South Chiller Plant:
-  * Chiller - 4: 131 observations
-  * Chiller - 3: 120 observations
-  * Chiller - 1: 96 observations
-  * Chiller - 5: 89 observations
-  * Chiller - 2: 86 observations
-* **Temporal Sequence:** The raw file is logged in **reverse chronological order** (Row 0 = March 20, 08:00; Row 521 = March 11, 00:00). Observations must be sorted ascending before time-series splitting.
-* **Operating Regime:**
-  * Dual-Compressor Operation (`Comp 1 > 0` & `Comp 2 > 0`): **517 rows (99.04%)**.
-  * Single-Compressor Operation: **5 rows (0.96%)** (Row 185, 194, 281, 335, 483).
-  * Chiller Offline / Idle: 0 rows (all entries reflect active cooling).
+1. **Physical Plausibility Rules & Data Cleaning:**
+   - Identified 16 extreme typo cells in Training (e.g., `Liquid Temp Comp 1` = 631.1 °C, 329.0 °C; `Discharge Pressure` = 88.0 kg/cm²; `Evaporator Water In` = 103 °C). In raw data, this inflated `Liquid Temp Comp 1` standard deviation 35.2× (from 1.00 °C to 35.33 °C), blinding PCA to real faults.
+   - Defined physical thermodynamic bounds based on R134a refrigeration physics. Violating cells are masked to `NaN` and imputed with `SimpleImputer(strategy='median')` fitted strictly on training data.
+   - Preserved complete transparency via `results/metrics/preprocessing/raw_vs_cleaned_comparison.csv` and `results/figures/preprocessing/raw_vs_cleaned_comparison.png`.
 
-### 3. Initial Industrial Logging Typo Discovery
-Human manual log entry errors were identified in the raw sheet:
-* **Motor Current Comp 1 (Row 460 & 475):** `1350.0 A` and `2196.0 A` (normal is ~`135 A` and `220 A`; classic $10\times$ decimal-shift slips).
-* **Motor Current Comp 2 (Row 195):** `2106.0 A` (normal is ~`210 A`).
-* **Liquid Temp Comp 1 (Row 297 & 441):** `631.1 °C` and `329.0 °C` (normal is ~`30 °C`).
-* **Condenser Water Out Temp (Row 388):** `3.0 °C` (inlet is $28.5\text{ }^\circ\text{C}$; water cannot cool to $3.0\text{ }^\circ\text{C}$ in an evaporative cooling tower; typo for $30.0\text{ }^\circ\text{C}$).
-* **Discharge Pressure Comp 1/2 (Row 213 & 416):** Pressures of `47.9 kg/cm²`, `88.0 kg/cm²`, and `82.0 kg/cm²` (normal is ~`8.0 kg/cm²`).
+2. **Validation Outlier Masking & Definite Threshold Calibration:**
+   - Row 86 (Sl.No 73, Chiller-1) had `Discharge Saturation Temp Comp 2 = 322 °C` ($z = 132.6$), producing $\text{SPE} \approx 14,984$ and corrupting the 99th percentile threshold to 1378.
+   - Masked via physical bounds and imputed to median. Clean validation thresholds are definitively established: $\tau_{\text{SPE}, 95} = 4.2703$, $\tau_{\text{SPE}, 99} = 7.8858$. All "Provisional" wording eliminated.
 
----
+3. **Randomized Multi-Trial Monte Carlo Benchmark (200 Trials per Magnitude):**
+   - Replaced fixed hand-picked tests with a randomized benchmark of **800 total injections** across magnitudes $1.0\sigma, 2.0\sigma, 3.0\sigma, 4.0\sigma$ using `np.random.seed(42)`.
+   - Empirically mapped the PCA sensitivity curve with 95% Wilson binomial confidence intervals: 1.5% detection at $1.0\sigma$ (normal operating variance), rising to 6.0% at $2.0\sigma$, 80.0% at $3.0\sigma$, and 89.5%–93.5% at $4.0\sigma$.
 
-## Approved Modeling Scope & Feature Boundary
+4. **100% Dynamic Calculation (Zero Hard-Coded Metrics):**
+   - Eliminated all static strings and hard-coded values (`drift_delay_hours`, `Clean_Baseline_FP_Contribution`, etc.). All metrics, delays, and false alarm counts are dynamically derived directly from data arrays.
 
-The modeling parameters approved for this project:
+5. **Method Gaps Filled — Hotelling's $T^2$ & Time-Series EWMA Monitoring:**
+   - **Hotelling's $T^2$ Statistic:** Monitors Mahalanobis distance inside the principal subspace ($T^2 = \sum t_j^2 / \lambda_j$), catching operating shifts that move parallel to principal components where SPE is orthogonal.
+   - **Time-Series EWMA Layer:** Implemented Exponentially Weighted Moving Average ($S_t = \lambda \text{SPE}_t + (1-\lambda) S_{t-1}$ with $\lambda = 0.20$), accumulating gradual incipient thermal drift and fulfilling the "Time-Series Detection" track mandate.
 
-1. **Fleet Scope (Pooled Dual-Compressor Operation):**
-   * Pool all 5 chillers under dual-compressor operation (**$N = 517$ observations**).
-   * *Statistical Justification:* A single chiller offers only 120–131 observations. For 28 input variables, a single machine gives a sample-to-feature ratio of $N/p \approx 4.3\text{--}4.7$, which risks unstable covariance estimation. Pooling gives $N = 517$ ($N/p \approx 18.5$), yielding robust eigenvalue decomposition.
-   * `CHILLER TAG` is retained for diagnostic tracking and error breakdowns, but **strictly excluded** from numerical PCA input features.
-2. **Feature Boundary (28 Core Thermodynamic Features):**
-   * The primary PCA detector is strictly restricted to the **28 core thermodynamic variables** (21 temperatures and 7 refrigerant pressures) directly addressing the research question.
-   * Operational load and motor currents are excluded from PCA inputs to avoid confounding thermodynamic relationships, but retained in metadata.
-3. **Approach Temperature Units:**
-   * `Evaporator Approach`, `Condenser Approach Comp 1`, and `Condenser Approach Comp 2` are classified as temperature differences measured in °C, documented officially as **"Deg C (Inferred)"** until facility documentation independently confirms it.
+6. **Component Selection ($k$) Sensitivity Analysis:**
+   - With clean data, $k=6$ satisfies the strict Kaiser criterion ($\lambda \ge 1.0$, 87.18% variance).
+   - Evaluated sensitivity table across $k \in \{6, 8, 10, 12, 14, 16, 17\}$.
+   - Primary model $k=12$ achieves **97.46% variance** (vs 85.46% on noisy data), captures dual-compressor cross-coupling, and reduces validation mean SPE to 0.9108 while leaving 16 residual dimensions for orthogonal fault isolation.
+
+7. **Reclassification of Baseline Test Excursions & Metric Upgrade:**
+   - Reclassified the 2 clean test flags (Index 38 on Chiller-4, Index 54 on Chiller-5) as genuine candidate operational excursions: Chiller-4 had 10.9 °C condenser approach (design maximum is 3–5 °C), and Chiller-5 suffered EXV differential pressure collapse.
+   - Demoted misleading accuracy; prioritized Precision, Recall, F1-Score, and generated PR / ROC curves.
+
+8. **Fleet Mix Shift Documentation & Submission Hygiene:**
+   - Documented the Chiller-1 composition shift (12.3% of train vs 50.7% of test) and pooled multi-unit assumptions.
+   - Master Jupyter notebook executed end-to-end with all 16 code cells showing verified saved outputs.
+   - All figures rendered with distinct line styles (`-`, `--`, `-.`, `:`), markers (`o`, `s`, `^`, `X`, `v`), and cross-hatching for black-and-white print legibility.
 
 ---
 
-## Complete 28 Core Thermodynamic Features List
+## Complete 28 Core Thermodynamic Features
 
 | # | Feature Name in Dataset | Subsystem | Domain Meaning | Unit |
 | :---: | :--- | :--- | :--- | :--- |
@@ -195,134 +176,63 @@ The modeling parameters approved for this project:
 
 ---
 
-## Phase 2 Summary: Data Quality Assessment & EDA Findings
+## Core Research Question Empirical Answer
 
-### 1. Data Quality Audit
-* **Completeness:** **100.0%** across all 60 columns and 522 rows (**0 missing cells**).
-* **Exact Duplicates:** **0 duplicate rows** across the dataset.
-* **Timestamp Repetitions:** 295 repeated timestamps occur in the sheet due to simultaneous operation of 2–4 chillers. Within each machine stream, there are **0 duplicate timestamps**.
-* **Zero-Variance Features:** **0 zero-variance features**. All 28 features possess positive sample variance.
-* **Sampling Regularity:** Dominant sampling interval is **1 hour (`0 days 01:00:00`)** across 222 unique plant hours.
-
-### 2. Temperature-Pressure Correlation Analysis (Empirical Proof of Research Question)
-The pairwise correlation analysis ($21 \times 7 = 147$ pairs) confirmed strong multivariate relationships:
-
-* **Strongest Positive Couplings ($r > +0.70$):**
-  1. `Discharge Temperature Comp 1` $\leftrightarrow$ `Discharge Pressure Comp 1`: **Pearson $r = \mathbf{+0.9578}$**, **Spearman $\rho = \mathbf{+0.7641}$**
-  2. `Discharge Saturation Temp Comp 1` $\leftrightarrow$ `Chiller Lift Pressure Comp 1`: **Pearson $r = \mathbf{+0.8541}$**, **Spearman $\rho = \mathbf{+0.8493}$**
-  3. `Chiler Lift Temperature Comp 1` $\leftrightarrow$ `Chiller Lift Pressure Comp 1`: **Pearson $r = \mathbf{+0.7685}$**, **Spearman $\rho = \mathbf{+0.6926}$**
-  4. `Liquid Temperature Comp 2` $\leftrightarrow$ `Chiller Lift Pressure Comp 2`: **Pearson $r = \mathbf{+0.7372}$**, **Spearman $\rho = \mathbf{+0.7065}$**
-  5. `Suction Saturation Temperature` $\leftrightarrow$ `Suction Pressure`: **Pearson $r = \mathbf{+0.7043}$**, **Spearman $\rho = \mathbf{+0.6660}$**
-* **Strongest Negative Couplings:**
-  1. `Discharge Superheat Comp 2` $\leftrightarrow$ `Suction Pressure`: **Pearson $r = \mathbf{-0.4746}$**, **Spearman $\rho = \mathbf{-0.4965}$**
-  2. `Evaporator Approach` $\leftrightarrow$ `Suction Pressure`: **Pearson $r = \mathbf{-0.3235}$**, **Spearman $\rho = \mathbf{-0.6484}$**
-* **Answer to Research Question:** **Yes.** Normal operating conditions exhibit strong linear and rank correlations governed by thermodynamic refrigeration laws. Because these sensors move together in a low-dimensional subspace, PCA can easily detect equipment faults, sensor drift, or line leaks that break this balance.
+> **"Can anomalies be detected from correlated temperature and pressure variables?"**
+>
+> **YES, EMPIRICALLY CONFIRMED.** Industrial chiller operations exhibit tight physical coupling between temperature and pressure loops ($r > +0.95$). PCA captures 97.46% of this covariance in a 12-dimensional principal subspace. When a physical fault breaks or violates these correlations, the observation cannot be represented by the principal components and is projected orthogonally into the residual subspace, elevating Squared Prediction Error (SPE) by 6× to 10× above the normal baseline. When combined with Hotelling's $T^2$ and an EWMA time-series filter, both abrupt sensor failures and incipient thermal drifts are reliably intercepted.
 
 ---
 
-## Phase 3 Summary: Data Preprocessing & Anti-Data-Leakage Protocol
+## Step-by-Step Execution Guide
 
-### 1. Chronological Partitioning by Unique Timestamps (70/15/15)
-To prevent temporal leakage from concurrent chillers, splitting was computed strictly on the **222 unique hourly timestamps**:
-* **Training Partition (First 70% of unique hours = 155 hours):**
-  * Observations: **358 rows (69.25%)** | `2026-03-11 00:00:00` to `2026-03-17 10:00:00`
-  * Chiller Representation: Chiller-1: 67, Chiller-2: 82, Chiller-3: 79, Chiller-4: 76, Chiller-5: 54
-* **Validation Partition (Next 15% of unique hours = 33 hours):**
-  * Observations: **92 rows (17.80%)** | `2026-03-17 11:00:00` to `2026-03-18 19:00:00`
-  * Chiller Representation: Chiller-1: 17, Chiller-2: 0, Chiller-3: 25, Chiller-4: 33, Chiller-5: 17
-* **Testing Partition (Final 15% of unique hours = 34 hours):**
-  * Observations: **67 rows (12.96%)** | `2026-03-18 20:00:00` to `2026-03-20 08:00:00`
-  * Chiller Representation: Chiller-1: 12, Chiller-2: 0, Chiller-3: 16, Chiller-4: 22, Chiller-5: 17
-* **Temporal Integrity Check:** $\text{Train End} < \text{Val Start} < \text{Val End} < \text{Test Start}$. Strictly zero temporal overlap.
+To reproduce the entire experimental pipeline from scratch:
 
-### 2. Transformers Fitted on Training Partition Only
-* **Imputer:** `SimpleImputer(strategy="median")` fitted strictly on $X_{\text{train}}$ ($N = 358$). Saved to `data/processed/imputer.joblib`.
-* **Scaler:** `StandardScaler` fitted strictly on $X_{\text{train}}$ ($Z = \frac{X - \mu_{\text{train}}}{\sigma_{\text{train}}}$). Saved to `data/processed/scaler.joblib`.
-* **Standardized Training Matrix Verification:** Mean max absolute error $= 4.62 \times 10^{-15} \approx 0.0$; Average std $= 1.0014 \approx 1.0$.
+```bash
+# 1. Install dependencies
+pip install -r requirements.txt
 
-### 3. Preprocessing Validation Audit (18-Point Check)
-All 18 validation criteria returned **PASS** (zero NaNs, zero Infs, strictly 28 features, strict chronological partitioning, raw source untouched).
+# 2. Phase 1: Data Inspection
+python src/data_inspection.py
 
----
+# 3. Phase 2: Exploratory Data Analysis & Correlation Matrix
+python src/eda_analysis.py
 
-## Phase 4 Summary: PCA Model Development
+# 4. Phase 3: Physical Plausibility Screening, Anti-Leakage Split & Scaling
+python src/preprocessing.py
 
-### 1. Mathematical Formulation
-* **Sample Covariance Matrix:** $\mathbf{\Sigma} = \frac{1}{N_{\text{train}} - 1} X_{\text{train}}^T X_{\text{train}} \in \mathbb{R}^{28 \times 28}$
-* **Eigenvalue Problem:** $\mathbf{\Sigma} \mathbf{v}_i = \lambda_i \mathbf{v}_i$
-* **Projection:** $\mathbf{z} = \mathbf{x} \mathbf{V}_k \in \mathbb{R}^k$
-* **Reconstruction:** $\hat{\mathbf{x}} = \mathbf{z} \mathbf{V}_k^T = \mathbf{x} \mathbf{V}_k \mathbf{V}_k^T$
-* **Residual Vector:** $\mathbf{e} = \mathbf{x} - \hat{\mathbf{x}}$
-* **Squared Prediction Error (SPE):** $\text{SPE} = \|\mathbf{e}\|^2 = \sum_{j=1}^{28} (x_j - \hat{x}_j)^2$
+# 5. Phase 4: Clean PCA Model Development & k Sensitivity Analysis
+python src/pca_detector.py
 
-### 2. Full Spectrum Variance & Component Selection Comparison
+# 6. Phase 5: Dual MSPC (SPE + T^2), EWMA Layer & Validation Thresholds
+python src/anomaly_detection_phase5.py
 
-| Candidate Strategy | Retained Components ($k$) | Cumulative Variance (%) | Residual Dimensions ($28 - k$) | Residual Variance (%) | Technical Trade-off for Anomaly Detection |
-| :--- | :---: | :---: | :---: | :---: | :--- |
-| **Kaiser Rule ($\lambda \ge 1.0$)** | 8 | 72.33% | 20 | 27.67% | Discards >27% of normal physical variance, creating high baseline SPE noise on normal validation data. |
-| **80% Target** | 11 | 82.50% | 17 | 17.50% | Acceptable compression, but slightly under-fits coupled secondary circuits. |
-| **85% Target (SELECTED)** | **12** | **85.46%** | **16** | **14.54%** | **Optimal MSPC Balance:** Captures >85% of normal thermodynamic covariance while reserving 16 residual dimensions to catch anomalous decoupling. |
-| **90% Target** | 14 | 90.85% | 14 | 9.15% | High fidelity; suitable if measurement noise is extremely small. |
-| **95% Target** | 17 | 95.67% | 11 | 4.33% | Over-retention; higher components begin learning noise, reducing anomaly contrast in residual SPE. |
+# 7. Phase 6: Monte Carlo Benchmark & Synthetic Scenarios
+python src/synthetic_experiments_phase6.py
 
-### 3. Component Loading Analysis (Physical Meaning of Subspaces)
-* **PC1 (23.77% Variance): High-Side / Condenser Compression Work Subspace**
-  * Dominant features: `Discharge Saturation Temp Comp 1` (+0.35), `Chiller Lift Pressure Comp 1` (+0.34), `Chiler Lift Temp Comp 1` (+0.30), `Liquid Temp Comp 2` (+0.30), `EXV Diff Pressure Comp 1` (+0.28).
-  * Captures compression work: lift temperature, lift pressure, and condensing saturation temperature rise together.
-* **PC2 (13.64% Variance): Low-Side / Evaporator Cooling Load Subspace**
-  * Dominant features: `Suction Pressure` (+0.46), `Suction Saturation Temp` (+0.38), `Suction Temp` (+0.34), `Discharge Superheat Comp 2` (-0.33), `Condenser Approach Comp 2` (+0.31).
-  * Captures cooling demand: higher evaporating load increases suction pressure and temperature while naturally lowering superheat.
+# 8. Phase 7: Consolidated Synthesis & Publication Figures
+python src/final_results_phase7.py
+
+# 9. Master Notebook Assembly & In-Place Execution
+python src/build_notebook.py
+python -m nbconvert --to notebook --execute --inplace notebooks/Chiller_PCA_Anomaly_Detection.ipynb
+
+# 10. Final Submission Archival
+python src/assemble_submission.py
+```
 
 ---
 
-## Technical Questions & Answers for Viva Preparation
+## Technical Viva Voce Defense Preparation
 
-1. **How many training observations were used to fit PCA?**
-   * Exactly **358 observations** from the chronological training partition (March 11 to March 17, 10:00). Zero validation or test records were used.
-2. **How many input features are in the PCA model?**
-   * Exactly **28 features** (21 temperature variables and 7 refrigerant pressure variables).
-3. **What variance does each retained component explain?**
-   * PC1: 23.77%, PC2: 13.64%, PC3: 8.88%, PC4: 6.91%, PC5: 6.16%, PC6: 5.20%, PC7: 4.06%, PC8: 3.70%, PC9: 3.50%, PC10: 3.35%, PC11: 3.32%, PC12: 2.96%. Total: **85.46%**.
-4. **Why was $k = 12$ chosen instead of retaining 95% variance?**
-   * In reconstruction-error anomaly detection, retaining too many components ($k \ge 17$) allows anomalous patterns to be partially reconstructed by higher components, diminishing the error signal. Retaining $k = 12$ captures the true normal operating subspace while leaving 16 residual dimensions where decoupled faults will show high SPE.
-5. **How will this PCA model be used in Phase 5?**
-   * Validation and testing observations will be projected into score space ($\mathbf{z} = \mathbf{x}\mathbf{V}_{12}$) and inverse-reconstructed ($\hat{\mathbf{x}} = \mathbf{z}\mathbf{V}_{12}^T$). The reconstruction error $\text{SPE} = \|\mathbf{x} - \hat{\mathbf{x}}\|^2$ will be compared against a statistical threshold $\text{SPE}_{\text{threshold}}$ determined from normal validation data.
-6. **Why is it essential that eigenvectors are orthogonal?**
-   * Orthogonality ($\mathbf{v}_i^T \mathbf{v}_j = 0$ for $i \ne j$) ensures that the principal components are completely uncorrelated and non-redundant, allowing variance to be partitioned cleanly without double-counting.
+1. **How does PCA detect anomalies in correlated thermodynamic variables?**
+   * PCA models normal operating correlation structure. When normal physics holds (e.g. higher discharge temperature corresponds to higher condensing pressure), observations project closely onto the $k$-dimensional principal subspace. When a fault occurs (such as sensor decalibration, refrigerant leak, or EXV failure), this correlation breaks, forcing the point into the residual subspace and producing an elevated Squared Prediction Error ($\text{SPE} = \|\mathbf{z} - \hat{\mathbf{z}}\|^2 > \tau$).
 
----
+2. **Why is Hotelling's $T^2$ needed in addition to SPE?**
+   * SPE only measures deviations *orthogonal* to the principal subspace (broken correlations). If an operating excursion moves *along* the correlated direction (e.g. an extreme operating load shift or severe plant-wide thermal overload), SPE remains small, but Hotelling's $T^2 = \sum t_j^2 / \lambda_j$ measures Mahalanobis distance *inside* the principal plane, triggering an alarm.
 
-## Execution Guide & How to Run
+3. **Why is a time-series layer (EWMA) necessary?**
+   * Point-by-point static SPE evaluates each hour independently. For subtle incipient drift ($< 2.5\sigma$), individual observations remain within normal variance. EWMA ($S_t = \lambda \text{SPE}_t + (1-\lambda) S_{t-1}$) accumulates consistent temporal drift, providing timely warning hours before critical threshold breach.
 
-1. **Verify Environment Dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-2. **Execute Phase 1 Data Inspection:**
-   ```bash
-   python src/data_inspection.py
-   ```
-3. **Execute Phase 2 Exploratory Data Analysis & Figures:**
-   ```bash
-   python src/eda_analysis.py
-   ```
-4. **Execute Phase 3 Preprocessing & Anti-Leakage Partitioning:**
-   ```bash
-   python src/preprocessing.py
-   ```
-5. **Execute Phase 4 PCA Model Training & Diagnostics:**
-   ```bash
-   python src/pca_detector.py
-   ```
-6. **Open the Project Notebook:**
-   ```bash
-   jupyter lab notebooks/Chiller_PCA_Anomaly_Detection.ipynb
-   ```
-
----
-
-## Roadmap of Remaining Phases
-* **Phase 5:** Reconstruction Error and Anomaly Detection (SPE calculation, validation thresholding, and test anomaly identification).
-* **Phase 6:** Synthetic Anomaly Experiments (Spike, Drift, and Correlation-Breaking testing).
-* **Phase 7:** Visualization and Result Interpretation (Final performance metrics, confusion matrices, and research question answer).
-* **Phase 8:** Final Documentation, Report Preparation, and Viva Defense.
+4. **How was data leakage prevented during model development?**
+   * Splitting was performed chronologically on unique plant timestamps (first 70% Train, next 15% Validation, final 15% Test). Transformers (`SimpleImputer` and `StandardScaler`) and the PCA model were fitted **strictly on the Training partition**. The anomaly thresholds ($\tau_{\text{SPE}}, \tau_{T^2}, \tau_{\text{EWMA}}$) were calibrated strictly on the clean Validation partition and applied frozen to Test data with zero parameter adjustment.

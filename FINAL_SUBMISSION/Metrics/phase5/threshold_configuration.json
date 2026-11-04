@@ -1,0 +1,49 @@
+{
+  "primary_threshold_status": "Final Verified Validation Threshold (Cleaned Data)",
+  "validation_sample_size": 92,
+  "primary_threshold_spe_95": 4.2703,
+  "secondary_threshold_spe_99": 7.8858,
+  "primary_threshold_T2_95": 41.1595,
+  "theoretical_T2_95": 22.0417,
+  "primary_threshold_ewma_spe_95": 1.8618,
+  "ewma_smoothing_factor_lambda": 0.2,
+  "rationale": "Calibrated strictly on N_val = 92 cleaned observations with zero data leakage. Primary SPE threshold tau_95 = 4.2703 anchors detection at empirical 95% specificity. Hotelling's T^2 empirical threshold tau_T2_95 = 41.16 (theoretical F-distribution: 22.04) monitors operating load shifts inside the principal subspace. EWMA-SPE threshold tau_ewma_95 = 1.8618 tracks cumulative incipient drift over time.",
+  "candidate_thresholds": [
+    {
+      "Percentile": "90.0%",
+      "Threshold_SPE": 1.6631,
+      "Threshold_T2": 20.9285,
+      "Threshold_EWMA_SPE": 1.6182,
+      "Val_Observations_Above_SPE": 10,
+      "Val_Pct_Above_SPE": 10.87,
+      "Trade_Off_Analysis": "Intermediate operational threshold."
+    },
+    {
+      "Percentile": "95.0%",
+      "Threshold_SPE": 4.2703,
+      "Threshold_T2": 41.1595,
+      "Threshold_EWMA_SPE": 1.8618,
+      "Val_Observations_Above_SPE": 5,
+      "Val_Pct_Above_SPE": 5.43,
+      "Trade_Off_Analysis": "Higher sensitivity; ~5 normal validation boundary excursions."
+    },
+    {
+      "Percentile": "97.5%",
+      "Threshold_SPE": 6.0758,
+      "Threshold_T2": 69.4291,
+      "Threshold_EWMA_SPE": 2.2603,
+      "Val_Observations_Above_SPE": 3,
+      "Val_Pct_Above_SPE": 3.26,
+      "Trade_Off_Analysis": "Intermediate operational threshold."
+    },
+    {
+      "Percentile": "99.0%",
+      "Threshold_SPE": 7.8858,
+      "Threshold_T2": 81.4257,
+      "Threshold_EWMA_SPE": 2.7218,
+      "Val_Observations_Above_SPE": 1,
+      "Val_Pct_Above_SPE": 1.09,
+      "Trade_Off_Analysis": "Conservative; high specificity; calibrated on clean validation tail."
+    }
+  ]
+}
