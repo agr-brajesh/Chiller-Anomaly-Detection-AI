@@ -1,0 +1,62 @@
+Column name,Worksheet,Data type,Possible meaning,Category,Unit,Confidence
+Sl.No,Log_Chiller_South,int64,Sequential record index in raw workbook,Identifier,None,High
+CHILLER TAG,Log_Chiller_South,object,Identifier of chiller unit (Chiller - 1 to 5),Identifier,None,High
+Date,Log_Chiller_South,datetime64[ns],Calendar date of logged entry (2026-03-11 to 2026-03-20),Timestamp,YYYY-MM-DD,High
+Time,Log_Chiller_South,object,Hourly timestamp of logged entry (00:00 to 23:00),Timestamp,HH:MM:SS,High
+Evaporator Water In Temperature Deg C,Log_Chiller_South,float64,Entering chilled water return temperature from building,Temperature,Deg C,High
+Evaporator Water Out Temperature Deg C,Log_Chiller_South,float64,Leaving chilled water supply temperature to building (cooling setpoint),Temperature,Deg C,High
+Condenser Water In Temperature Deg C,Log_Chiller_South,float64,Entering cooling tower water temperature into condenser,Temperature,Deg C,High
+Condenser Water Out Temperature Deg C,Log_Chiller_South,float64,Leaving condenser water temperature returning to cooling tower,Temperature,Deg C,High
+Running Load % Comp 1,Log_Chiller_South,float64,Percentage capacity operating load of Compressor 1,Operating state,%,High
+Running Load % Comp 2,Log_Chiller_South,float64,Percentage capacity operating load of Compressor 2,Operating state,%,High
+Motor Current Amps Comp 1,Log_Chiller_South,float64,Electric motor electrical current draw for Compressor 1,Power,Amps,High
+Motor Current Amps Comp 2,Log_Chiller_South,float64,Electric motor electrical current draw for Compressor 2,Power,Amps,High
+Discharge Temperature Deg C Comp 1,Log_Chiller_South,float64,Refrigerant discharge vapor temperature leaving Compressor 1,Temperature,Deg C,High
+Discharge Temperature Deg C Comp 2,Log_Chiller_South,float64,Refrigerant discharge vapor temperature leaving Compressor 2,Temperature,Deg C,High
+Discharge Pressure Kg /cm 2 Comp 1,Log_Chiller_South,float64,Refrigerant high-side condenser pressure for Compressor 1,Pressure,Kg /cm 2,High
+Discharge Pressure Kg /cm 2 Comp 2,Log_Chiller_South,float64,Refrigerant high-side condenser pressure for Compressor 2,Pressure,Kg /cm 2,High
+Suction Temperature Deg C,Log_Chiller_South,float64,Refrigerant low-side vapor temperature entering compressors,Temperature,Deg C,High
+Suction Pressure Kg /cm 2,Log_Chiller_South,float64,Refrigerant low-side evaporator pressure,Pressure,Kg /cm 2,High
+Chiler Lift Temperature Deg C Comp 1,Log_Chiller_South,float64,Temperature lift differential (Discharge Temp - Suction Temp) Comp 1,Temperature,Deg C,High
+Chiler Lift Temperature Deg C Comp 2,Log_Chiller_South,float64,Temperature lift differential (Discharge Temp - Suction Temp) Comp 2,Temperature,Deg C,High
+Chiller Lift Pressure Kg /cm 2 Comp 1,Log_Chiller_South,float64,Pressure lift differential (Discharge Pressure - Suction Pressure) Comp 1,Pressure,Kg /cm 2,High
+Chiller Lift Pressure Kg /cm 2 Comp 2,Log_Chiller_South,float64,Pressure lift differential (Discharge Pressure - Suction Pressure) Comp 2,Pressure,Kg /cm 2,High
+Compressure Run Hours Comp 1,Log_Chiller_South,int64,Cumulative operating running hours for Compressor 1,Other,Hours,High
+Compressure Run Hours Comp 2,Log_Chiller_South,int64,Cumulative operating running hours for Compressor 2,Other,Hours,High
+Suction Saturation Temperature Deg C,Log_Chiller_South,float64,Refrigerant boiling saturation temperature at suction pressure,Temperature,Deg C,High
+Suction Superheat deg C,Log_Chiller_South,float64,Suction vapor superheat (Suction Temp - Suction Saturation Temp),Temperature,deg C,High
+Evaporator Approach,Log_Chiller_South,float64,Evaporator approach (Leaving chilled water temp - Evap saturation temp),Temperature,Deg C (Inferred),Medium
+Discharge Saturation Temperature Deg C Comp 1,Log_Chiller_South,float64,Refrigerant condensing saturation temperature at discharge pressure Comp 1,Temperature,Deg C,High
+Discharge Saturation Temperature Deg C Comp 2,Log_Chiller_South,float64,Refrigerant condensing saturation temperature at discharge pressure Comp 2,Temperature,Deg C,High
+Discharge Superheat Deg C Comp 1,Log_Chiller_South,float64,Discharge vapor superheat (Discharge Temp - Discharge Saturation Temp) Comp 1,Temperature,Deg C,High
+Discharge Superheat Deg C Comp 2,Log_Chiller_South,float64,Discharge vapor superheat (Discharge Temp - Discharge Saturation Temp) Comp 2,Temperature,Deg C,High
+Condenser Approach Comp 1,Log_Chiller_South,float64,Condenser approach (Condenser saturation temp - Condenser water out temp) Comp 1,Temperature,Deg C (Inferred),Medium
+Condenser Approach Comp 2,Log_Chiller_South,float64,Condenser approach (Condenser saturation temp - Condenser water out temp) Comp 2,Temperature,Deg C (Inferred),Medium
+Liquid Temperature Deg C Comp 1,Log_Chiller_South,float64,Subcooled liquid refrigerant temperature leaving condenser Circuit 1,Temperature,Deg C,High
+Liquid Temperature Deg C Comp 2,Log_Chiller_South,float64,Subcooled liquid refrigerant temperature leaving condenser Circuit 2,Temperature,Deg C,High
+Oil Temperature Deg C,Log_Chiller_South,float64,Compressor lubrication oil temperature,Temperature,Deg C,High
+VFD Out Comp 1,Log_Chiller_South,float64,Variable Frequency Drive output frequency or speed percentage Comp 1,Control actuator,Hz or % (Uncertain),Medium
+VFD Out Comp 2,Log_Chiller_South,float64,Variable Frequency Drive output frequency or speed percentage Comp 2,Control actuator,Hz or % (Uncertain),Medium
+EXV Differential Pressure Kg /cm 2 Comp 1,Log_Chiller_South,float64,Differential pressure drop across Electronic Expansion Valve 1,Pressure,Kg /cm 2,High
+EXV Differential Pressure Kg /cm 2 Comp 2,Log_Chiller_South,float64,Differential pressure drop across Electronic Expansion Valve 2,Pressure,Kg /cm 2,High
+Output To EXV Comp 1,Log_Chiller_South,float64,Control signal / opening percentage command to EXV 1,Control actuator,% (Inferred),Medium
+Volt R,Log_Chiller_South,float64,Three-phase line electrical voltage Phase R,Power,Volts,High
+Volt Y,Log_Chiller_South,float64,Three-phase line electrical voltage Phase Y,Power,Volts,High
+Volt B,Log_Chiller_South,float64,Three-phase line electrical voltage Phase B,Power,Volts,High
+Primary Pump Suction Pressure Bar,Log_Chiller_South,float64,Suction side pressure of primary chilled water circulation pump,Pressure,Bar,High
+Primary Pump Discharge Pressure Bar,Log_Chiller_South,float64,Discharge side pressure of primary chilled water circulation pump,Pressure,Bar,High
+Primary Pump Current R Amps,Log_Chiller_South,float64,Primary chilled water pump motor current Phase R,Power,Amps,High
+Primary Pump Current Y Amps,Log_Chiller_South,float64,Primary chilled water pump motor current Phase Y,Power,Amps,High
+Primary Pump Current B Amps,Log_Chiller_South,float64,Primary chilled water pump motor current Phase B,Power,Amps,High
+Condenser Pump Suction Pressure Bar,Log_Chiller_South,float64,Suction side pressure of condenser water circulation pump,Pressure,Bar,High
+Condenser Pump Discharge Pressure Bar,Log_Chiller_South,float64,Discharge side pressure of condenser water circulation pump,Pressure,Bar,High
+Condenser Pump Current R Amps,Log_Chiller_South,float64,Condenser water pump motor current Phase R,Power,Amps,High
+Condenser Pump Current Y Amps,Log_Chiller_South,float64,Condenser water pump motor current Phase Y,Power,Amps,High
+Condenser Pump Current B Amps,Log_Chiller_South,float64,Condenser water pump motor current Phase B,Power,Amps,High
+Cooling Tower Motor Current Fan 1 R Amps,Log_Chiller_South,float64,Cooling Tower Fan 1 motor current Phase R,Power,Amps,High
+Cooling Tower Motor Current Fan 1 Y Amps,Log_Chiller_South,float64,Cooling Tower Fan 1 motor current Phase Y,Power,Amps,High
+Cooling Tower Motor Current Fan 1 B Amps,Log_Chiller_South,float64,Cooling Tower Fan 1 motor current Phase B,Power,Amps,High
+Cooling Tower Motor Current Fan 2 R Amps,Log_Chiller_South,float64,Cooling Tower Fan 2 motor current Phase R,Power,Amps,High
+Cooling Tower Motor Current Fan 2 Y Amps,Log_Chiller_South,float64,Cooling Tower Fan 2 motor current Phase Y,Power,Amps,High
+Cooling Tower Motor Current Fan 2 B Amps,Log_Chiller_South,float64,Cooling Tower Fan 2 motor current Phase B,Power,Amps,High
+

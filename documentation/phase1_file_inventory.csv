@@ -1,0 +1,13 @@
+Filename,Location,Extension,Size_Bytes,Size_Formatted,Description
+Analyse Chillers_AI Course.xls,.,.xls,665088,649.5 KB,Duplicate raw Excel dataset copy in project root (preserved unmodified)
+Analyse Chillers_AI Course.xls,data/raw/official_dataset/,.xls,665088,649.5 KB,Authoritative official raw instructor dataset (preserved unmodified)
+data_inspection.py,src/,.py,9600,~9.4 KB,Phase 1 inspection and diagnostic script for Excel workbook
+requirements.txt,.,.txt,170,~170 B,Project dependency specifications
+README.md,.,.md,1550,~1.5 KB,Project overview academic metadata and setup instructions
+.gitignore,.,None,720,~720 B,Git version control exclusions (ignores data/raw and *.xls)
+dataset_profile_working.md,documentation/,.md,8800,~8.6 KB,Factual working profile of dataset properties and observations
+initial_data_dictionary.csv,documentation/,.csv,5800,~5.7 KB,Comprehensive data dictionary for all 60 columns
+phase1_file_inventory.csv,documentation/,.csv,1100,~1.1 KB,Inventory of all project files locations sizes and descriptions
+phase1_decision_log.md,documentation/,.md,4500,~4.5 KB,Engineering decision log and unresolved research questions for student approval
+ai_assistance_log.md,documentation/,.md,3200,~3.2 KB,Academic integrity audit log of AI assistance and independent contributions
+

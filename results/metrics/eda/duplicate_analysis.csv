@@ -1,0 +1,11 @@
+Check_Type,Duplicate_Count,Interpretation
+Exact Duplicate Rows (Raw Fleet N=522),0,No completely duplicated sensor records
+Exact Duplicate Rows (Dual Fleet N=517),0,No completely duplicated sensor records
+Duplicate Column Names (out of 60),0,All 60 column names are strictly unique
+Cross-Plant Timestamp Repeats (Raw),300,Repeated hours due to multiple chillers logging at the same timestamp (Expected)
+Cross-Plant Timestamp Repeats (Dual),295,Concurrent operation of 2-4 chillers per plant hour
+Chiller - 1 Timestamp Repeats,0,Zero repeated timestamps within machine stream
+Chiller - 2 Timestamp Repeats,0,Zero repeated timestamps within machine stream
+Chiller - 3 Timestamp Repeats,0,Zero repeated timestamps within machine stream
+Chiller - 4 Timestamp Repeats,0,Zero repeated timestamps within machine stream
+Chiller - 5 Timestamp Repeats,0,Zero repeated timestamps within machine stream

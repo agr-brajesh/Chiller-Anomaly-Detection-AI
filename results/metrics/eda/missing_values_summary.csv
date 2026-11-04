@@ -1,0 +1,61 @@
+Column_Name,Is_Core_28,Data_Type,Total_Observations,Missing_Count,Missing_Percentage,Non_Null_Count
+Sl.No,No,int64,522,0,0.0,522
+CHILLER TAG,No,str,522,0,0.0,522
+Date,No,datetime64[us],522,0,0.0,522
+Time,No,object,522,0,0.0,522
+Evaporator Water In Temperature Deg C,Yes,float64,522,0,0.0,522
+Evaporator Water Out Temperature Deg C,Yes,float64,522,0,0.0,522
+Condenser Water In Temperature Deg C,Yes,float64,522,0,0.0,522
+Condenser Water Out Temperature Deg C,Yes,float64,522,0,0.0,522
+Running Load % Comp 1,No,float64,522,0,0.0,522
+Running Load % Comp 2,No,float64,522,0,0.0,522
+Motor Current Amps Comp 1,No,float64,522,0,0.0,522
+Motor Current Amps Comp 2,No,float64,522,0,0.0,522
+Discharge Temperature Deg C Comp 1,Yes,float64,522,0,0.0,522
+Discharge Temperature Deg C Comp 2,Yes,float64,522,0,0.0,522
+Discharge Pressure Kg /cm 2 Comp 1,Yes,float64,522,0,0.0,522
+Discharge Pressure Kg /cm 2 Comp 2,Yes,float64,522,0,0.0,522
+Suction Temperature Deg C,Yes,float64,522,0,0.0,522
+Suction Pressure Kg /cm 2,Yes,float64,522,0,0.0,522
+Chiler Lift Temperature Deg C Comp 1,Yes,float64,522,0,0.0,522
+Chiler Lift Temperature Deg C Comp 2,Yes,float64,522,0,0.0,522
+Chiller Lift Pressure Kg /cm 2 Comp 1,Yes,float64,522,0,0.0,522
+Chiller Lift Pressure Kg /cm 2 Comp 2,Yes,float64,522,0,0.0,522
+Compressure Run Hours Comp 1,No,int64,522,0,0.0,522
+Compressure Run Hours Comp 2,No,int64,522,0,0.0,522
+Suction Saturation Temperature Deg C,Yes,float64,522,0,0.0,522
+Suction Superheat deg C,Yes,float64,522,0,0.0,522
+Evaporator Approach,Yes,float64,522,0,0.0,522
+Discharge Saturation Temperature Deg C Comp 1,Yes,float64,522,0,0.0,522
+Discharge Saturation Temperature Deg C Comp 2,Yes,float64,522,0,0.0,522
+Discharge Superheat Deg C Comp 1,Yes,float64,522,0,0.0,522
+Discharge Superheat Deg C Comp 2,Yes,float64,522,0,0.0,522
+Condenser Approach Comp 1,Yes,float64,522,0,0.0,522
+Condenser Approach Comp 2,Yes,float64,522,0,0.0,522
+Liquid Temperature Deg C Comp 1,Yes,float64,522,0,0.0,522
+Liquid Temperature Deg C Comp 2,Yes,float64,522,0,0.0,522
+Oil Temperature Deg C,Yes,float64,522,0,0.0,522
+VFD Out Comp 1,No,float64,522,0,0.0,522
+VFD Out Comp 2,No,float64,522,0,0.0,522
+EXV Differential Pressure Kg /cm 2 Comp 1,Yes,float64,522,0,0.0,522
+EXV Differential Pressure Kg /cm 2 Comp 2,Yes,float64,522,0,0.0,522
+Output To EXV Comp 1,No,float64,522,0,0.0,522
+Volt R,No,float64,522,0,0.0,522
+Volt Y,No,float64,522,0,0.0,522
+Volt B,No,float64,522,0,0.0,522
+Primary Pump Suction Pressure Bar,No,float64,522,0,0.0,522
+Primary Pump Discharge Pressure Bar,No,float64,522,0,0.0,522
+Primary Pump Current R Amps,No,float64,522,0,0.0,522
+Primary Pump Current Y Amps,No,float64,522,0,0.0,522
+Primary Pump Current B Amps,No,float64,522,0,0.0,522
+Condenser Pump Suction Pressure Bar,No,float64,522,0,0.0,522
+Condenser Pump Discharge Pressure Bar,No,float64,522,0,0.0,522
+Condenser Pump Current R Amps,No,float64,522,0,0.0,522
+Condenser Pump Current Y Amps,No,float64,522,0,0.0,522
+Condenser Pump Current B Amps,No,float64,522,0,0.0,522
+Cooling Tower Motor Current Fan 1 R Amps,No,float64,522,0,0.0,522
+Cooling Tower Motor Current Fan 1 Y Amps,No,float64,522,0,0.0,522
+Cooling Tower Motor Current Fan 1 B Amps,No,float64,522,0,0.0,522
+Cooling Tower Motor Current Fan 2 R Amps,No,float64,522,0,0.0,522
+Cooling Tower Motor Current Fan 2 Y Amps,No,float64,522,0,0.0,522
+Cooling Tower Motor Current Fan 2 B Amps,No,float64,522,0,0.0,522
