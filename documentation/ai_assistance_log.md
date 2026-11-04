@@ -162,3 +162,17 @@
   - Student reviews the 12 publication-quality figures and the consolidated experiment table.
   - Student uses the evidence table to formulate their own original academic conclusions and report sections.
   - Stop condition respected: no proceeding to Phase 8 without explicit student authorization.
+
+
+### Entry 11: Phase 8 — Final Case Study Documentation and Submission Preparation
+- **Date:** 2026-11-04
+- **Task Performed:** Comprehensive final audit across all 8 phases; finalized technical documentation (`preprocessing_notes.md`, `model_configuration.md`, `evaluation_and_interpretation.md`, `viva_preparation.md`); verified master Jupyter notebook (`notebooks/Chiller_PCA_Anomaly_Detection.ipynb`, 45 cells); programmatically generated structured Microsoft Word case study report template (`Case_Study_Report_Template.docx`, 5–8 page outline with verified tables, placeholders, and academic writing guidance); programmatically generated Microsoft PowerPoint presentation template (`presentation/Chiller_Anomaly_Detection_Template.pptx`, 12 widescreen slides with embedded final charts); assembled clean submission hierarchy (`FINAL_SUBMISSION/`) and created archive package (`FINAL_SUBMISSION_24BCE0551.zip`, 4.99 MB); conducted cross-document numerical audit; generated final submission audit report (`final_submission_audit.md`).
+- **Nature of Assistance:** Technical auditor, documentation organizer, script developer (`generate_report_docx.py`, `generate_presentation_pptx.py`, `assemble_submission.py`), viva learning guide author, and submission packager.
+- **Academic Integrity Compliance:**
+  - AI did NOT ghostwrite the final academic report or presentation script. Structured templates with placeholders and verified numerical tables were provided for the student to write their own independent narrative.
+  - Raw dataset was excluded from the submission archive to comply with instructor upload limits.
+  - All numerical values across all documents and presentations match double-precision source metrics.
+- **Student Independent Action Items:**
+  - Student independently writes their 5–8 page report in Word by replacing placeholders in `Case_Study_Report_Template.docx`.
+  - Student customizes speaker notes in `Chiller_Anomaly_Detection_Template.pptx`.
+  - Student reviews the 12 viva topics in `viva_preparation.md` for oral defense.
