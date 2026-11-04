@@ -1,0 +1,2 @@
+Total_Test_Observations,Flagged_Potential_Anomalies,Unflagged_Normal,Flagged_Percentage,Validation_Threshold_Used,Test_SPE_Mean,Test_SPE_Median,Test_SPE_Std,Test_SPE_Min,Test_SPE_Max
+67,2,65,2.99,9.2931,2.4913,1.9749,2.0776,0.6425,13.5997

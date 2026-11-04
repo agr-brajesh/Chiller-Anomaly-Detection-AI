@@ -1,0 +1,45 @@
+{
+  "primary_threshold_percentile": 95.0,
+  "primary_threshold_spe": 9.2931,
+  "primary_threshold_status": "Provisional - Recommended for Student & Instructor Review",
+  "validation_sample_size": 92,
+  "rationale": "With N_val = 92, the 95th percentile (9.2931) is anchored by ~5 observations, providing empirical tail stability. Extreme percentiles (97.5% and 99%) are anchored by only 1-2 points and exhibit high sample variance.",
+  "candidate_thresholds": [
+    {
+      "Percentile": "90.0%",
+      "Threshold_SPE": 5.0538,
+      "Val_Observations_Above": 10,
+      "Val_Pct_Above": 10.87,
+      "Tail_Determining_Points": 10,
+      "Order_Statistic_Rank": "Top 10 of 92",
+      "Trade_Off_Analysis": "Moderate; captures top 10%"
+    },
+    {
+      "Percentile": "95.0%",
+      "Threshold_SPE": 9.2931,
+      "Val_Observations_Above": 5,
+      "Val_Pct_Above": 5.43,
+      "Tail_Determining_Points": 5,
+      "Order_Statistic_Rank": "Top 5 of 92",
+      "Trade_Off_Analysis": "Higher sensitivity; ~5 false alarm candidates under normal operation"
+    },
+    {
+      "Percentile": "97.5%",
+      "Threshold_SPE": 11.9014,
+      "Val_Observations_Above": 3,
+      "Val_Pct_Above": 3.26,
+      "Tail_Determining_Points": 3,
+      "Order_Statistic_Rank": "Top 3 of 92",
+      "Trade_Off_Analysis": "Conservative; determined by only ~2 observations"
+    },
+    {
+      "Percentile": "99.0%",
+      "Threshold_SPE": 1378.3543,
+      "Val_Observations_Above": 1,
+      "Val_Pct_Above": 1.09,
+      "Tail_Determining_Points": 1,
+      "Order_Statistic_Rank": "Top 1 of 92",
+      "Trade_Off_Analysis": "Extreme tail; determined by single outlier observation"
+    }
+  ]
+}

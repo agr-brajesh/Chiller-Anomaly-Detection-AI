@@ -113,3 +113,21 @@
   - Confirmed strict test set isolation ($N = 67$) for Phase 5 threshold calibration.
   - Reviewed recommendations for independent student report writing and viva defense preparation to ensure < 10% AI-generated content and < 5% similarity compliance.
   - Evaluated final readiness decision: `READY TO PROCEED TO PHASE 5` pending student authorization.
+
+
+### Entry 8: Phase 5 — Reconstruction Error and PCA-Based Anomaly Detection
+- **Date:** 2026-11-04
+- **Task Performed:** Implemented Phase 5 anomaly detection pipeline (`src/anomaly_detection_phase5.py`) using previously fitted artifacts (`pca_model.joblib`, `scaler.joblib`, `imputer.joblib`): performed projection and reconstruction in standardized feature space ($\hat{\mathbf{z}} = \mathbf{z}\mathbf{V}_k^T$), computed Squared Prediction Error ($\text{SPE} = \sum e_{ij}^2$) across all 28 features, evaluated validation threshold candidates (90%, 95%, 97.5%, 99%), discovered extreme tail distortion at the 99th percentile caused by a human logging typo ($322^\circ\text{C}$ in validation set), justified and recommended the 95th percentile threshold ($\tau = 9.2931$), applied the frozen threshold to the held-out test partition ($N_{\text{test}} = 67$), flagged 2 potential anomalies (2.99%), computed sensor-wise squared residual contributions (identifying that low-side suction and evaporator variables account for >73% of reconstruction error), analyzed chiller-specific distributions, generated 6 publication-quality figures, created 10 metric files, wrote `documentation/phase5_anomaly_detection_working.md`, and updated the project notebook.
+- **Nature of Assistance:** Technical mentoring, pipeline implementation, statistical explanation of order statistics and threshold stability under small sample sizes, sensor contribution analysis, visualization generation, and working documentation.
+- **Code/Explanations Suggested:**
+  - Python script `src/anomaly_detection_phase5.py`.
+  - Mathematical definition of SPE as sum of squared residuals: $\text{SPE}_i = \sum_{j=1}^{28} (z_{ij} - \hat{z}_{ij})^2$.
+  - Analysis of order statistics in validation set ($N_{\text{val}} = 92$) and why the 95th percentile is far more robust to extreme logging typos than the 99th percentile.
+  - Explanation of sensor-wise contribution formula: $\text{Contrib}_{ij} = e_{ij}^2 / \text{SPE}_i \times 100\%$.
+  - Clarified why supervised metrics (Precision, Recall, ROC-AUC) must NOT be computed on real operational test data in the absence of verified ground truth.
+- **Student Independent Review & Decisions:**
+  - Review validation SPE statistics and the empirical cause of the 99th percentile distortion ($322^\circ\text{C}$ saturation typo).
+  - Review and confirm recommended provisional threshold ($\tau = 9.2931$).
+  - Evaluate the 2 flagged test observations (Chiller-5 at 02:00 on March 20 and Chiller-4 at 17:00 on March 19).
+  - Understand physical sensor contributions (suction temperature and lift temperature deviations).
+  - Confirm stop condition: wait for student authorization before proceeding to Phase 6 synthetic anomaly testing.

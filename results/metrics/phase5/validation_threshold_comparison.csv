@@ -1,0 +1,5 @@
+Percentile,Threshold_SPE,Val_Observations_Above,Val_Pct_Above,Tail_Determining_Points,Order_Statistic_Rank,Trade_Off_Analysis
+90.0%,5.0538,10,10.87,10,Top 10 of 92,Moderate; captures top 10%
+95.0%,9.2931,5,5.43,5,Top 5 of 92,Higher sensitivity; ~5 false alarm candidates under normal operation
+97.5%,11.9014,3,3.26,3,Top 3 of 92,Conservative; determined by only ~2 observations
+99.0%,1378.3543,1,1.09,1,Top 1 of 92,Extreme tail; determined by single outlier observation
