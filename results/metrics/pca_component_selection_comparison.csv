@@ -1,0 +1,6 @@
+Candidate_Strategy,Components_Retained_k,Dimensions_Removed_Residuals,Cumulative_Explained_Variance_Pct,Residual_Unexplained_Variance_Pct,Detection_Tradeoff_Analysis
+Kaiser Criterion (Lambda >= 1.0),8,20,72.33,27.67,Conservative dimension reduction. Leaves 27.67% variance in residuals; risks higher normal validation SPE noise.
+80% Cumulative Variance,11,17,82.5,17.5,Good compression (k=11). Retains 17 residual dimensions for anomaly projection.
+85% Cumulative Variance (Recommended),12,16,85.46,14.54,RECOMMENDED: Captures 85.46% of core thermodynamic covariance while reserving 16 orthogonal residual dimensions to catch decoupled anomaly vectors.
+90% Cumulative Variance,14,14,90.85,9.15,High retention (k=14). Leaves 14 residual dimensions. Good fit for low-noise systems.
+95% Cumulative Variance,17,11,95.67,4.33,High component count (k=17). Only 11 residual dimensions remain; risks reconstructing subtle anomalies inside the model.

@@ -1,5 +1,5 @@
 """
-Helper script to generate notebooks/Chiller_PCA_Anomaly_Detection.ipynb
+Updated script to generate notebooks/Chiller_PCA_Anomaly_Detection.ipynb with Phases 1-4
 """
 
 import json
@@ -21,7 +21,7 @@ nb = {
                 "\n",
                 "---\n",
                 "## Project Overview\n",
-                "This notebook implements the complete research pipeline across eight structured phases. The current progress implements **Phase 1 (Dataset Understanding)**, **Phase 2 (Data Quality & EDA)**, and **Phase 3 (Data Preprocessing and Anti-Data-Leakage Protocol)**."
+                "This notebook implements the complete research pipeline across eight structured phases. The current progress implements **Phase 1 (Dataset Understanding)**, **Phase 2 (Data Quality & EDA)**, **Phase 3 (Data Preprocessing & Anti-Data-Leakage)**, and **Phase 4 (PCA Model Development)**."
             ]
         },
         {
@@ -46,6 +46,7 @@ nb = {
                 "import seaborn as sns\n",
                 "from sklearn.impute import SimpleImputer\n",
                 "from sklearn.preprocessing import StandardScaler\n",
+                "from sklearn.decomposition import PCA\n",
                 "\n",
                 "# Set visual styling\n",
                 "plt.style.use('seaborn-v0_8-whitegrid' if 'seaborn-v0_8-whitegrid' in plt.style.available else 'default')\n",
@@ -157,34 +158,30 @@ nb = {
             "metadata": {},
             "outputs": [],
             "source": [
-                "unique_ts = np.sort(df_dual['Timestamp'].unique())\n",
-                "n_unique = len(unique_ts)\n",
-                "n_train_ts = int(n_unique * 0.70)\n",
-                "n_val_ts = int(n_unique * 0.15)\n",
+                "train_feat_path = os.path.join('..', 'data', 'processed', 'train_features.csv')\n",
+                "if not os.path.exists(train_feat_path):\n",
+                "    train_feat_path = os.path.join('data', 'processed', 'train_features.csv')\n",
                 "\n",
-                "train_ts = set(unique_ts[:n_train_ts])\n",
-                "val_ts = set(unique_ts[n_train_ts:n_train_ts + n_val_ts])\n",
-                "test_ts = set(unique_ts[n_train_ts + n_val_ts:])\n",
+                "val_feat_path = train_feat_path.replace('train_features.csv', 'validation_features.csv')\n",
+                "test_feat_path = train_feat_path.replace('train_features.csv', 'test_features.csv')\n",
                 "\n",
-                "df_train = df_dual[df_dual['Timestamp'].isin(train_ts)].reset_index(drop=True)\n",
-                "df_val = df_dual[df_dual['Timestamp'].isin(val_ts)].reset_index(drop=True)\n",
-                "df_test = df_dual[df_dual['Timestamp'].isin(test_ts)].reset_index(drop=True)\n",
+                "X_train = pd.read_csv(train_feat_path)\n",
+                "X_val = pd.read_csv(val_feat_path)\n",
+                "X_test = pd.read_csv(test_feat_path)\n",
                 "\n",
-                "print(f'Train Partition:      {len(df_train)} rows ({100*len(df_train)/len(df_dual):.1f}%) | {df_train[\"Timestamp\"].min()} to {df_train[\"Timestamp\"].max()}')\n",
-                "print(f'Validation Partition: {len(df_val)} rows ({100*len(df_val)/len(df_dual):.1f}%) | {df_val[\"Timestamp\"].min()} to {df_val[\"Timestamp\"].max()}')\n",
-                "print(f'Test Partition:       {len(df_test)} rows ({100*len(df_test)/len(df_dual):.1f}%) | {df_test[\"Timestamp\"].min()} to {df_test[\"Timestamp\"].max()}')\n",
-                "\n",
-                "X_train_raw = df_train[core_28].copy()\n",
-                "X_val_raw = df_val[core_28].copy()\n",
-                "X_test_raw = df_test[core_28].copy()"
+                "print(f'Train features loaded: {X_train.shape} (strictly standardized on train)')\n",
+                "print(f'Validation features:   {X_val.shape}')\n",
+                "print(f'Test features:         {X_test.shape}')"
             ]
         },
         {
             "cell_type": "markdown",
             "metadata": {},
             "source": [
-                "### 4.3 Missing-Value Inspection and Median Imputation\n",
-                "`SimpleImputer(strategy='median')` is fitted **strictly on the training partition**."
+                "## 5. Phase 4: PCA Model Development\n",
+                "\n",
+                "### 5.1 Full Spectrum PCA Exploration (Training Partition Only)\n",
+                "PCA solves $\\mathbf{\\Sigma}\\mathbf{v}_i = \\lambda_i \\mathbf{v}_i$ on standardized training observations."
             ]
         },
         {
@@ -193,21 +190,24 @@ nb = {
             "metadata": {},
             "outputs": [],
             "source": [
-                "imputer = SimpleImputer(strategy='median')\n",
-                "imputer.fit(X_train_raw)\n",
+                "pca_full = PCA(svd_solver='full', whiten=False)\n",
+                "pca_full.fit(X_train)\n",
                 "\n",
-                "X_train_imp = pd.DataFrame(imputer.transform(X_train_raw), columns=core_28)\n",
-                "X_val_imp = pd.DataFrame(imputer.transform(X_val_raw), columns=core_28)\n",
-                "X_test_imp = pd.DataFrame(imputer.transform(X_test_raw), columns=core_28)\n",
-                "print('Median imputer successfully fitted on training set and applied to all partitions.')"
+                "evr = pca_full.explained_variance_ratio_\n",
+                "cev = np.cumsum(evr)\n",
+                "eig_vals = pca_full.explained_variance_\n",
+                "\n",
+                "print('Top 5 Principal Components Explained Variance:')\n",
+                "for i in range(5):\n",
+                "    print(f'  PC{i+1}: Eigenvalue = {eig_vals[i]:.4f} | EVR = {evr[i]*100:.2f}% | Cumulative = {cev[i]*100:.2f}%')"
             ]
         },
         {
             "cell_type": "markdown",
             "metadata": {},
             "source": [
-                "### 4.4 Training Set Feature Variance & Quality Audit\n",
-                "Verify that no feature is constant in the training split to avoid division by zero during standardization."
+                "### 5.2 Scree Plot & Cumulative Explained Variance Evaluation\n",
+                "Evaluate the Kaiser criterion ($\\lambda \\ge 1.0$), elbow point, and cumulative variance targets."
             ]
         },
         {
@@ -216,18 +216,36 @@ nb = {
             "metadata": {},
             "outputs": [],
             "source": [
-                "train_vars = X_train_imp.var()\n",
-                "zero_vars = train_vars[train_vars == 0]\n",
-                "print(f'Constant features in training partition: {len(zero_vars)}')\n",
-                "print(f'Lowest training variance: {train_vars.min():.6f} ({train_vars.idxmin()})')"
+                "fig, axes = plt.subplots(1, 2, figsize=(14, 5))\n",
+                "\n",
+                "# Scree Plot\n",
+                "axes[0].plot(range(1, 29), eig_vals, marker='o', color='#2b5c8f', linewidth=1.8)\n",
+                "axes[0].axhline(1.0, color='#d95f02', linestyle='--', label='Kaiser Criterion (λ = 1.0)')\n",
+                "axes[0].axvline(12, color='#2ca02c', linestyle=':', label='Selected Cutoff (k = 12)')\n",
+                "axes[0].set_xlabel('Principal Component Index')\n",
+                "axes[0].set_ylabel('Eigenvalue (Variance)')\n",
+                "axes[0].set_title('PCA Scree Plot (Training Set)')\n",
+                "axes[0].legend()\n",
+                "\n",
+                "# Cumulative Variance Plot\n",
+                "axes[1].plot(range(1, 29), cev * 100, marker='s', color='#7570b3', linewidth=1.8)\n",
+                "axes[1].axhline(85.0, color='#d95f02', linestyle='--', label='85% Target')\n",
+                "axes[1].axvline(12, color='#2ca02c', linestyle=':', label=f'k = 12 ({cev[11]*100:.1f}%)')\n",
+                "axes[1].set_xlabel('Number of Retained Components (k)')\n",
+                "axes[1].set_ylabel('Cumulative Explained Variance (%)')\n",
+                "axes[1].set_title('Cumulative Explained Variance Curve')\n",
+                "axes[1].legend()\n",
+                "\n",
+                "plt.tight_layout()\n",
+                "plt.show()"
             ]
         },
         {
             "cell_type": "markdown",
             "metadata": {},
             "source": [
-                "### 4.5 Feature Standardization (StandardScaler)\n",
-                "Fit `StandardScaler` strictly on imputed training data and transform all partitions."
+                "### 5.3 Final PCA Model Training (k = 12 Components, 85.46% Variance)\n",
+                "We retain $k = 12$ principal components, balancing the retention of normal thermodynamic operating variance against reserving 16 residual dimensions for anomaly detection."
             ]
         },
         {
@@ -236,24 +254,23 @@ nb = {
             "metadata": {},
             "outputs": [],
             "source": [
-                "scaler = StandardScaler()\n",
-                "scaler.fit(X_train_imp)\n",
+                "k_selected = 12\n",
+                "pca_model = PCA(n_components=k_selected, svd_solver='full', whiten=False)\n",
+                "pca_model.fit(X_train)\n",
                 "\n",
-                "X_train_scaled = pd.DataFrame(scaler.transform(X_train_imp), columns=core_28)\n",
-                "X_val_scaled = pd.DataFrame(scaler.transform(X_val_imp), columns=core_28)\n",
-                "X_test_scaled = pd.DataFrame(scaler.transform(X_test_imp), columns=core_28)\n",
-                "\n",
-                "print(f'StandardScaler fitted on training partition.')\n",
-                "print(f'Training scaled mean range: [{X_train_scaled.mean().min():.2e}, {X_train_scaled.mean().max():.2e}]')\n",
-                "print(f'Training scaled std range:  [{X_train_scaled.std().min():.4f}, {X_train_scaled.std().max():.4f}]')"
+                "train_scores = pca_model.transform(X_train)\n",
+                "print(f'Fitted final PCA detector with k={k_selected} components.')\n",
+                "print(f'Cumulative Explained Variance: {np.sum(pca_model.explained_variance_ratio_)*100:.2f}%')\n",
+                "print(f'Residual Subspace Dimensions:  {28 - k_selected} dimensions')"
             ]
         },
         {
             "cell_type": "markdown",
             "metadata": {},
             "source": [
-                "### 4.6 Preprocessing Validation & Saved Artifact Verification\n",
-                "Confirm that all saved CSV files and joblib transformer pipelines are present in `data/processed/`."
+                "### 5.4 Component Loading Analysis (Physical Meaning of PC1 and PC2)\n",
+                "- **PC1 (23.77%):** High-Side / Condenser Compression Subspace (`Discharge Saturation Temp` +0.35, `Lift Pressure` +0.34, `Lift Temp` +0.30).\n",
+                "- **PC2 (13.64%):** Low-Side / Evaporator Cooling Load Subspace (`Suction Pressure` +0.46, `Suction Saturation Temp` +0.38, `Superheat` -0.33)."
             ]
         },
         {
@@ -262,18 +279,39 @@ nb = {
             "metadata": {},
             "outputs": [],
             "source": [
-                "processed_dir = os.path.join('..', 'data', 'processed') if os.path.exists(os.path.join('..', 'data', 'processed')) else os.path.join('data', 'processed')\n",
-                "expected_files = [\n",
-                "    'selected_features.json', 'split_manifest.json',\n",
-                "    'train_features.csv', 'validation_features.csv', 'test_features.csv',\n",
-                "    'train_metadata.csv', 'validation_metadata.csv', 'test_metadata.csv',\n",
-                "    'imputer.joblib', 'scaler.joblib'\n",
-                "]\n",
+                "loadings = pd.DataFrame(pca_model.components_.T, index=X_train.columns, columns=[f'PC{i+1}' for i in range(k_selected)])\n",
+                "print('Top 5 Features loading into PC1 (High-Side Condenser Lift):')\n",
+                "print(loadings['PC1'].abs().sort_values(ascending=False).head(5))\n",
                 "\n",
-                "for f in expected_files:\n",
-                "    fpath = os.path.join(processed_dir, f)\n",
-                "    print(f'  - {f:25s}: Exists = {os.path.exists(fpath)}')\n",
-                "print('\\nAll Phase 3 artifacts successfully verified.')"
+                "print('\\nTop 5 Features loading into PC2 (Low-Side Evaporator Cooling Load):')\n",
+                "print(loadings['PC2'].abs().sort_values(ascending=False).head(5))"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "### 5.5 Fleet Homogeneity Diagnostic (PC1 vs PC2 by Chiller Tag)"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": None,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "train_meta_path = train_feat_path.replace('train_features.csv', 'train_metadata.csv')\n",
+                "meta_train = pd.read_csv(train_meta_path)\n",
+                "\n",
+                "plt.figure(figsize=(8, 6))\n",
+                "sns.scatterplot(x=train_scores[:, 0], y=train_scores[:, 1], hue=meta_train['CHILLER TAG'], palette='tab10', alpha=0.75, s=35)\n",
+                "plt.xlabel(f'PC1 Score ({pca_model.explained_variance_ratio_[0]*100:.1f}%)')\n",
+                "plt.ylabel(f'PC2 Score ({pca_model.explained_variance_ratio_[1]*100:.1f}%)')\n",
+                "plt.title('Chiller Fleet Representation in Principal Subspace (PC1 vs PC2)')\n",
+                "plt.axhline(0, color='gray', linestyle='--', linewidth=0.8)\n",
+                "plt.axvline(0, color='gray', linestyle='--', linewidth=0.8)\n",
+                "plt.grid(True, linestyle='--', alpha=0.5)\n",
+                "plt.show()"
             ]
         }
     ],
@@ -296,5 +334,4 @@ nb_path = os.path.join("notebooks", "Chiller_PCA_Anomaly_Detection.ipynb")
 with open(nb_path, "w", encoding="utf-8") as f:
     json.dump(nb, f, indent=2)
 
-print(f"Jupyter Notebook generated successfully at: {nb_path}")
-
+print(f"Jupyter Notebook updated successfully with Phases 1-4 at: {nb_path}")

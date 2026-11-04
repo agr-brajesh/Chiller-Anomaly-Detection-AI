@@ -79,3 +79,25 @@
   - Confirmed chronological split sizes (Train = 358, Val = 92, Test = 67).
   - Verified 18-point validation audit in `results/metrics/preprocessing/preprocessing_validation.csv`.
   - Confirmed that PCA training and thresholding remain untouched until Phase 4 approval.
+
+
+### Entry 5: Phase 4 — PCA Model Development
+- **Date:** 2026-11-04
+- **Task Performed:** Implemented Phase 4 PCA detector training (`src/pca_detector.py`) strictly on the standardized training partition ($N_{\text{train}} = 358, p = 28$): computed full eigenvalue spectrum, evaluated candidate component selection rules (Kaiser, 80%, 85%, 90%, 95%), selected and justified $k = 12$ components (capturing 85.46% variance with 16 residual dimensions), trained final PCA model, analyzed eigenvector loadings, generated 6 diagnostic visualizations, saved model and configuration artifacts, and integrated Phase 4 into the project notebook.
+- **Nature of Assistance:** Technical mentoring, mathematical explanation of eigenvalue decomposition and projection/reconstruction geometry, developing `src/pca_detector.py`, generating diagnostic figures, writing working document `documentation/phase4_pca_working.md`, and explaining thermodynamic interpretations of PC1 and PC2.
+- **Code/Explanations Suggested:**
+  - Python script `src/pca_detector.py` implementing Activities A through F.
+  - Equations for sample covariance ($\mathbf{\Sigma} = \frac{1}{N-1}X^TX$), eigenvalue problem ($\mathbf{\Sigma}\mathbf{v} = \lambda\mathbf{v}$), EVR ($\lambda_i / 28$), projection ($\mathbf{z} = \mathbf{x}\mathbf{V}_k$), and reconstruction ($\hat{\mathbf{x}} = \mathbf{z}\mathbf{V}_k^T$).
+  - Trade-off analysis for component selection in reconstruction-error-based anomaly detectors.
+  - Identification of physical meaning in loadings: PC1 captures High-Side / Condenser Compression Lift, while PC2 captures Low-Side / Evaporator Cooling Demand.
+- **Student Independent Review & Viva Preparation:**
+  - Understand the mathematical difference between principal subspace and residual subspace.
+  - Justify why $k = 12$ was selected over $k = 8$ or $k = 17$.
+  - Explain how reconstruction error (SPE) will be derived from the 16 residual dimensions in Phase 5.
+
+
+### Entry 6: Master Documentation & README Synchronization
+- **Date:** 2026-11-04
+- **Task Performed:** Synchronized and compiled the comprehensive repository documentation in `README.md`, integrating all findings, tables, mathematical formulations, 28-feature breakdowns, anti-leakage split metrics, PCA component loading interpretations, and viva Q&A from Phases 1 through 4 into a centralized master document.
+- **Nature of Assistance:** Repository documentation structuring, technical writing, table formatting, and cross-linking to generated figures and metrics.
+- **Student Verification:** Confirmed that `README.md` now contains the full end-to-end technical record of all project phases completed so far.
