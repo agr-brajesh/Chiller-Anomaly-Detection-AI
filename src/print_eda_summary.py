@@ -14,3 +14,4 @@ df_qual = pd.read_csv('results/metrics/eda/sensor_quality_summary.csv')
 df_top_outliers = df_qual.sort_values('IQR_Outlier_Count', ascending=False).head(8)
 for idx, r in df_top_outliers.iterrows():
     print(f"  * {r['Feature_Name'][:40]:40s} | Variance = {r['Variance']:10.4f} | IQR Outliers = {r['IQR_Outlier_Count']:3d} ({r['IQR_Outlier_Pct']:4.1f}%) | Min={r['Min_Value']} Max={r['Max_Value']}")
+

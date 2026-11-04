@@ -1,0 +1,177 @@
+{
+  "project_title": "AI-Based Anomaly Detection and Intelligent Monitoring of Chiller Operating Data",
+  "student_id": "24BCE0551",
+  "total_selected_features": 28,
+  "temperature_features_count": 21,
+  "pressure_features_count": 7,
+  "feature_list": [
+    {
+      "feature_name": "Evaporator Water In Temperature Deg C",
+      "category": "Temperature",
+      "unit": "Deg C",
+      "suitability_for_pca": "Approved - Continuous thermodynamic variable"
+    },
+    {
+      "feature_name": "Evaporator Water Out Temperature Deg C",
+      "category": "Temperature",
+      "unit": "Deg C",
+      "suitability_for_pca": "Approved - Continuous thermodynamic variable"
+    },
+    {
+      "feature_name": "Condenser Water In Temperature Deg C",
+      "category": "Temperature",
+      "unit": "Deg C",
+      "suitability_for_pca": "Approved - Continuous thermodynamic variable"
+    },
+    {
+      "feature_name": "Condenser Water Out Temperature Deg C",
+      "category": "Temperature",
+      "unit": "Deg C",
+      "suitability_for_pca": "Approved - Continuous thermodynamic variable"
+    },
+    {
+      "feature_name": "Discharge Temperature Deg C Comp 1",
+      "category": "Temperature",
+      "unit": "Deg C",
+      "suitability_for_pca": "Approved - Continuous thermodynamic variable"
+    },
+    {
+      "feature_name": "Discharge Temperature Deg C Comp 2",
+      "category": "Temperature",
+      "unit": "Deg C",
+      "suitability_for_pca": "Approved - Continuous thermodynamic variable"
+    },
+    {
+      "feature_name": "Suction Temperature Deg C",
+      "category": "Temperature",
+      "unit": "Deg C",
+      "suitability_for_pca": "Approved - Continuous thermodynamic variable"
+    },
+    {
+      "feature_name": "Chiler Lift Temperature Deg C Comp 1",
+      "category": "Temperature",
+      "unit": "Deg C",
+      "suitability_for_pca": "Approved - Continuous thermodynamic variable"
+    },
+    {
+      "feature_name": "Chiler Lift Temperature Deg C Comp 2",
+      "category": "Temperature",
+      "unit": "Deg C",
+      "suitability_for_pca": "Approved - Continuous thermodynamic variable"
+    },
+    {
+      "feature_name": "Suction Saturation Temperature Deg C",
+      "category": "Temperature",
+      "unit": "Deg C",
+      "suitability_for_pca": "Approved - Continuous thermodynamic variable"
+    },
+    {
+      "feature_name": "Suction Superheat deg C",
+      "category": "Temperature",
+      "unit": "Deg C",
+      "suitability_for_pca": "Approved - Continuous thermodynamic variable"
+    },
+    {
+      "feature_name": "Evaporator Approach",
+      "category": "Temperature",
+      "unit": "Deg C (Inferred)",
+      "suitability_for_pca": "Approved - Continuous thermodynamic variable"
+    },
+    {
+      "feature_name": "Discharge Saturation Temperature Deg C Comp 1",
+      "category": "Temperature",
+      "unit": "Deg C",
+      "suitability_for_pca": "Approved - Continuous thermodynamic variable"
+    },
+    {
+      "feature_name": "Discharge Saturation Temperature Deg C Comp 2",
+      "category": "Temperature",
+      "unit": "Deg C",
+      "suitability_for_pca": "Approved - Continuous thermodynamic variable"
+    },
+    {
+      "feature_name": "Discharge Superheat Deg C Comp 1",
+      "category": "Temperature",
+      "unit": "Deg C",
+      "suitability_for_pca": "Approved - Continuous thermodynamic variable"
+    },
+    {
+      "feature_name": "Discharge Superheat Deg C Comp 2",
+      "category": "Temperature",
+      "unit": "Deg C",
+      "suitability_for_pca": "Approved - Continuous thermodynamic variable"
+    },
+    {
+      "feature_name": "Condenser Approach Comp 1",
+      "category": "Temperature",
+      "unit": "Deg C (Inferred)",
+      "suitability_for_pca": "Approved - Continuous thermodynamic variable"
+    },
+    {
+      "feature_name": "Condenser Approach Comp 2",
+      "category": "Temperature",
+      "unit": "Deg C (Inferred)",
+      "suitability_for_pca": "Approved - Continuous thermodynamic variable"
+    },
+    {
+      "feature_name": "Liquid Temperature Deg C Comp 1",
+      "category": "Temperature",
+      "unit": "Deg C",
+      "suitability_for_pca": "Approved - Continuous thermodynamic variable"
+    },
+    {
+      "feature_name": "Liquid Temperature Deg C Comp 2",
+      "category": "Temperature",
+      "unit": "Deg C",
+      "suitability_for_pca": "Approved - Continuous thermodynamic variable"
+    },
+    {
+      "feature_name": "Oil Temperature Deg C",
+      "category": "Temperature",
+      "unit": "Deg C",
+      "suitability_for_pca": "Approved - Continuous thermodynamic variable"
+    },
+    {
+      "feature_name": "Discharge Pressure Kg /cm 2 Comp 1",
+      "category": "Pressure",
+      "unit": "Kg /cm 2",
+      "suitability_for_pca": "Approved - Continuous thermodynamic variable"
+    },
+    {
+      "feature_name": "Discharge Pressure Kg /cm 2 Comp 2",
+      "category": "Pressure",
+      "unit": "Kg /cm 2",
+      "suitability_for_pca": "Approved - Continuous thermodynamic variable"
+    },
+    {
+      "feature_name": "Suction Pressure Kg /cm 2",
+      "category": "Pressure",
+      "unit": "Kg /cm 2",
+      "suitability_for_pca": "Approved - Continuous thermodynamic variable"
+    },
+    {
+      "feature_name": "Chiller Lift Pressure Kg /cm 2 Comp 1",
+      "category": "Pressure",
+      "unit": "Kg /cm 2",
+      "suitability_for_pca": "Approved - Continuous thermodynamic variable"
+    },
+    {
+      "feature_name": "Chiller Lift Pressure Kg /cm 2 Comp 2",
+      "category": "Pressure",
+      "unit": "Kg /cm 2",
+      "suitability_for_pca": "Approved - Continuous thermodynamic variable"
+    },
+    {
+      "feature_name": "EXV Differential Pressure Kg /cm 2 Comp 1",
+      "category": "Pressure",
+      "unit": "Kg /cm 2",
+      "suitability_for_pca": "Approved - Continuous thermodynamic variable"
+    },
+    {
+      "feature_name": "EXV Differential Pressure Kg /cm 2 Comp 2",
+      "category": "Pressure",
+      "unit": "Kg /cm 2",
+      "suitability_for_pca": "Approved - Continuous thermodynamic variable"
+    }
+  ]
+}

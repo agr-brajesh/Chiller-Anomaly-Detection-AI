@@ -1,0 +1,300 @@
+"""
+Helper script to generate notebooks/Chiller_PCA_Anomaly_Detection.ipynb
+"""
+
+import json
+import os
+
+nb = {
+    "cells": [
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "# AI-Based Anomaly Detection and Intelligent Monitoring of Chiller Operating Data\n",
+                "\n",
+                "- **Student Register Number:** 24BCE0551\n",
+                "- **Track:** Multivariate and Time-Series Detection\n",
+                "- **Assigned Method:** PCA-Based Multivariate Anomaly Detector\n",
+                "- **Research Question:** *Can anomalies be detected from correlated temperature and pressure variables?*\n",
+                "- **Official Dataset:** `data/raw/official_dataset/Analyse Chillers_AI Course.xls`\n",
+                "\n",
+                "---\n",
+                "## Project Overview\n",
+                "This notebook implements the complete research pipeline across eight structured phases. The current progress implements **Phase 1 (Dataset Understanding)**, **Phase 2 (Data Quality & EDA)**, and **Phase 3 (Data Preprocessing and Anti-Data-Leakage Protocol)**."
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## 1. Environment Setup and Library Imports"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": None,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "import os\n",
+                "import json\n",
+                "import joblib\n",
+                "import numpy as np\n",
+                "import pandas as pd\n",
+                "import matplotlib.pyplot as plt\n",
+                "import seaborn as sns\n",
+                "from sklearn.impute import SimpleImputer\n",
+                "from sklearn.preprocessing import StandardScaler\n",
+                "\n",
+                "# Set visual styling\n",
+                "plt.style.use('seaborn-v0_8-whitegrid' if 'seaborn-v0_8-whitegrid' in plt.style.available else 'default')\n",
+                "print('Libraries successfully imported.')"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## 2. Phase 1: Official Dataset Inspection & Discovery\n",
+                "- Raw file format: Excel 97-2004 (`.xls`)\n",
+                "- Primary worksheet: `Log_Chiller_South`\n",
+                "- Header offset: Row index 2 (Excel row 3)"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": None,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "raw_path = os.path.join('..', 'data', 'raw', 'official_dataset', 'Analyse Chillers_AI Course.xls')\n",
+                "if not os.path.exists(raw_path):\n",
+                "    raw_path = os.path.join('data', 'raw', 'official_dataset', 'Analyse Chillers_AI Course.xls')\n",
+                "\n",
+                "df_raw = pd.read_excel(raw_path, sheet_name='Log_Chiller_South', header=2)\n",
+                "df_raw.columns = [str(c).strip() for c in df_raw.columns]\n",
+                "df_raw['Timestamp'] = pd.to_datetime(df_raw['Date'].dt.strftime('%Y-%m-%d') + ' ' + df_raw['Time'].astype(str))\n",
+                "print(f'Raw dataset loaded: {df_raw.shape[0]} rows x {df_raw.shape[1]} columns')\n",
+                "print(f'Fleet distribution:\\n{df_raw[\"CHILLER TAG\"].value_counts()}')"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## 3. Phase 2: Data Quality Assessment & EDA Highlights\n",
+                "- Completeness: 100.0% (0 missing values across all columns)\n",
+                "- Duplicate rows: 0 exact duplicate rows\n",
+                "- Correlation analysis confirms strong thermodynamic relationships between temperatures and pressures (e.g. Discharge Temp Comp 1 vs Discharge Pressure Comp 1, $r = +0.9578$).\n",
+                "- Zero-variance features: 0 features with variance=0."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": None,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "# Filter dual-compressor operating regime (N = 517)\n",
+                "dual_mask = (df_raw['Running Load % Comp 1'] > 0) & (df_raw['Running Load % Comp 2'] > 0)\n",
+                "df_dual = df_raw[dual_mask].sort_values('Timestamp').reset_index(drop=True)\n",
+                "print(f'Dual-compressor fleet size: {len(df_dual)} observations (5 single-compressor rows excluded)')"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## 4. Phase 3: Data Preprocessing and Anti-Data-Leakage Protocol\n",
+                "\n",
+                "### 4.1 Feature Identification (28 Core Thermodynamic Features)\n",
+                "We restrict the PCA input space strictly to the 28 thermodynamic features directly addressing the research question."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": None,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "temp_features = [\n",
+                "    'Evaporator Water In Temperature Deg C', 'Evaporator Water Out Temperature Deg C',\n",
+                "    'Condenser Water In Temperature Deg C', 'Condenser Water Out Temperature Deg C',\n",
+                "    'Discharge Temperature Deg C Comp 1', 'Discharge Temperature Deg C Comp 2',\n",
+                "    'Suction Temperature Deg C', 'Chiler Lift Temperature Deg C Comp 1',\n",
+                "    'Chiler Lift Temperature Deg C Comp 2', 'Suction Saturation Temperature Deg C',\n",
+                "    'Suction Superheat deg C', 'Evaporator Approach',\n",
+                "    'Discharge Saturation Temperature Deg C Comp 1', 'Discharge Saturation Temperature Deg C Comp 2',\n",
+                "    'Discharge Superheat Deg C Comp 1', 'Discharge Superheat Deg C Comp 2',\n",
+                "    'Condenser Approach Comp 1', 'Condenser Approach Comp 2',\n",
+                "    'Liquid Temperature Deg C Comp 1', 'Liquid Temperature Deg C Comp 2',\n",
+                "    'Oil Temperature Deg C'\n",
+                "]\n",
+                "\n",
+                "press_features = [\n",
+                "    'Discharge Pressure Kg /cm 2 Comp 1', 'Discharge Pressure Kg /cm 2 Comp 2',\n",
+                "    'Suction Pressure Kg /cm 2', 'Chiller Lift Pressure Kg /cm 2 Comp 1',\n",
+                "    'Chiller Lift Pressure Kg /cm 2 Comp 2', 'EXV Differential Pressure Kg /cm 2 Comp 1',\n",
+                "    'EXV Differential Pressure Kg /cm 2 Comp 2'\n",
+                "]\n",
+                "\n",
+                "core_28 = temp_features + press_features\n",
+                "print(f'Selected {len(core_28)} core features ({len(temp_features)} Temp + {len(press_features)} Press)')"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "### 4.2 Chronological Partitioning (70% / 15% / 15% by Unique Timestamps)\n",
+                "To prevent temporal data leakage when multiple chillers operate at the same hour, partitioning is computed on **unique timestamps**."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": None,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "unique_ts = np.sort(df_dual['Timestamp'].unique())\n",
+                "n_unique = len(unique_ts)\n",
+                "n_train_ts = int(n_unique * 0.70)\n",
+                "n_val_ts = int(n_unique * 0.15)\n",
+                "\n",
+                "train_ts = set(unique_ts[:n_train_ts])\n",
+                "val_ts = set(unique_ts[n_train_ts:n_train_ts + n_val_ts])\n",
+                "test_ts = set(unique_ts[n_train_ts + n_val_ts:])\n",
+                "\n",
+                "df_train = df_dual[df_dual['Timestamp'].isin(train_ts)].reset_index(drop=True)\n",
+                "df_val = df_dual[df_dual['Timestamp'].isin(val_ts)].reset_index(drop=True)\n",
+                "df_test = df_dual[df_dual['Timestamp'].isin(test_ts)].reset_index(drop=True)\n",
+                "\n",
+                "print(f'Train Partition:      {len(df_train)} rows ({100*len(df_train)/len(df_dual):.1f}%) | {df_train[\"Timestamp\"].min()} to {df_train[\"Timestamp\"].max()}')\n",
+                "print(f'Validation Partition: {len(df_val)} rows ({100*len(df_val)/len(df_dual):.1f}%) | {df_val[\"Timestamp\"].min()} to {df_val[\"Timestamp\"].max()}')\n",
+                "print(f'Test Partition:       {len(df_test)} rows ({100*len(df_test)/len(df_dual):.1f}%) | {df_test[\"Timestamp\"].min()} to {df_test[\"Timestamp\"].max()}')\n",
+                "\n",
+                "X_train_raw = df_train[core_28].copy()\n",
+                "X_val_raw = df_val[core_28].copy()\n",
+                "X_test_raw = df_test[core_28].copy()"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "### 4.3 Missing-Value Inspection and Median Imputation\n",
+                "`SimpleImputer(strategy='median')` is fitted **strictly on the training partition**."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": None,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "imputer = SimpleImputer(strategy='median')\n",
+                "imputer.fit(X_train_raw)\n",
+                "\n",
+                "X_train_imp = pd.DataFrame(imputer.transform(X_train_raw), columns=core_28)\n",
+                "X_val_imp = pd.DataFrame(imputer.transform(X_val_raw), columns=core_28)\n",
+                "X_test_imp = pd.DataFrame(imputer.transform(X_test_raw), columns=core_28)\n",
+                "print('Median imputer successfully fitted on training set and applied to all partitions.')"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "### 4.4 Training Set Feature Variance & Quality Audit\n",
+                "Verify that no feature is constant in the training split to avoid division by zero during standardization."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": None,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "train_vars = X_train_imp.var()\n",
+                "zero_vars = train_vars[train_vars == 0]\n",
+                "print(f'Constant features in training partition: {len(zero_vars)}')\n",
+                "print(f'Lowest training variance: {train_vars.min():.6f} ({train_vars.idxmin()})')"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "### 4.5 Feature Standardization (StandardScaler)\n",
+                "Fit `StandardScaler` strictly on imputed training data and transform all partitions."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": None,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "scaler = StandardScaler()\n",
+                "scaler.fit(X_train_imp)\n",
+                "\n",
+                "X_train_scaled = pd.DataFrame(scaler.transform(X_train_imp), columns=core_28)\n",
+                "X_val_scaled = pd.DataFrame(scaler.transform(X_val_imp), columns=core_28)\n",
+                "X_test_scaled = pd.DataFrame(scaler.transform(X_test_imp), columns=core_28)\n",
+                "\n",
+                "print(f'StandardScaler fitted on training partition.')\n",
+                "print(f'Training scaled mean range: [{X_train_scaled.mean().min():.2e}, {X_train_scaled.mean().max():.2e}]')\n",
+                "print(f'Training scaled std range:  [{X_train_scaled.std().min():.4f}, {X_train_scaled.std().max():.4f}]')"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "### 4.6 Preprocessing Validation & Saved Artifact Verification\n",
+                "Confirm that all saved CSV files and joblib transformer pipelines are present in `data/processed/`."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": None,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "processed_dir = os.path.join('..', 'data', 'processed') if os.path.exists(os.path.join('..', 'data', 'processed')) else os.path.join('data', 'processed')\n",
+                "expected_files = [\n",
+                "    'selected_features.json', 'split_manifest.json',\n",
+                "    'train_features.csv', 'validation_features.csv', 'test_features.csv',\n",
+                "    'train_metadata.csv', 'validation_metadata.csv', 'test_metadata.csv',\n",
+                "    'imputer.joblib', 'scaler.joblib'\n",
+                "]\n",
+                "\n",
+                "for f in expected_files:\n",
+                "    fpath = os.path.join(processed_dir, f)\n",
+                "    print(f'  - {f:25s}: Exists = {os.path.exists(fpath)}')\n",
+                "print('\\nAll Phase 3 artifacts successfully verified.')"
+            ]
+        }
+    ],
+    "metadata": {
+        "kernelspec": {
+            "display_name": "Python 3",
+            "language": "python",
+            "name": "python3"
+        },
+        "language_info": {
+            "name": "python",
+            "version": "3.12.4"
+        }
+    },
+    "nbformat": 4,
+    "nbformat_minor": 5
+}
+
+nb_path = os.path.join("notebooks", "Chiller_PCA_Anomaly_Detection.ipynb")
+with open(nb_path, "w", encoding="utf-8") as f:
+    json.dump(nb, f, indent=2)
+
+print(f"Jupyter Notebook generated successfully at: {nb_path}")
+

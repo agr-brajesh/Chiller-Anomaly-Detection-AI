@@ -1,0 +1,19 @@
+Validation_Check,Expected,Observed,Status
+Expected Feature Count,28,28,PASS
+Train Partition Row Count,358,358,PASS
+Validation Partition Row Count,92,92,PASS
+Test Partition Row Count,67,67,PASS
+Total Partitioned Observations,517,517,PASS
+Missing Values in Train Features,0,0,PASS
+Missing Values in Val Features,0,0,PASS
+Missing Values in Test Features,0,0,PASS
+Infinite Values in Train Features,0,0,PASS
+Infinite Values in Val Features,0,0,PASS
+Infinite Values in Test Features,0,0,PASS
+Training Scaled Mean Approx Zero,< 1e-4,4.62e-15,PASS
+Training Scaled Std Approx One,1.0000,1.0014,PASS
+Temporal Leakage Prevention (Train End < Val Start),True,True,PASS
+Temporal Leakage Prevention (Val End < Test Start),True,True,PASS
+Chiller Identity Excluded from PCA Matrix,True,True,PASS
+Timestamp Excluded from PCA Matrix,True,True,PASS
+Raw Source Workbook Modified,False,False (Untouched),PASS
