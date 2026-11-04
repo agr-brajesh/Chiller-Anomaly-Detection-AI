@@ -663,6 +663,86 @@ nb = {
                 "\n",
                 "print('Phase 6 Synthetic Evaluation Complete.')"
             ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "## 8. Phase 7: Final Visualization, Results Analysis and Interpretation\n",
+                "\n",
+                "- **Synthesis:** Consolidates all empirical evidence from Phases 1 through 6.\n",
+                "- **Key Deliverables:**\n",
+                "  - Consolidated performance comparison across all synthetic scenarios.\n",
+                "  - Research Question Evidence Table addressing physical temperature-pressure detection.\n",
+                "  - Identification of empirical boundaries and academic limitations."
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": None,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "# 8.1 Load and display consolidated experiment performance table\n",
+                "df_exp_comp = pd.read_csv('results/metrics/final/final_experiment_comparison.csv')\n",
+                "print('Consolidated Synthetic Experiment Comparison (Observation-Level vs Event-Level):')\n",
+                "display_cols = ['Scenario', 'Injected_Observations', 'TP', 'FP', 'FN', 'Precision', 'Recall', 'F1_Score', 'Accuracy', 'Total_Events_Injected', 'Events_Detected', 'Event_Detection_Rate_Pct', 'Detection_Delay']\n",
+                "print(df_exp_comp[display_cols].to_string(index=False))"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "### 8.2 Research Question Evidence Matrix\n",
+                "Evaluating the central research question: *Can anomalies be detected from correlated temperature and pressure variables?*"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": None,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "# 8.2 Load and display the Research Question Evidence Table\n",
+                "df_rq = pd.read_csv('results/metrics/final/research_question_evidence.csv')\n",
+                "print('Research Question Empirical Evidence Table:')\n",
+                "for idx, row in df_rq.iterrows():\n",
+                "    print(f'\\n[Claim {idx+1}] {row[\"Research_Claim\"]}')\n",
+                "    print(f'  - Status:     {row[\"Status\"]}')\n",
+                "    print(f'  - Evidence:   {row[\"Actual_Supporting_Result\"]}')\n",
+                "    print(f'  - Limitation: {row[\"Limitation\"]}')"
+            ]
+        },
+        {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "### 8.3 Final Visualization Summary (12 Figures at 300 DPI)\n",
+                "All 12 high-resolution figures have been saved to `results/figures/final/`:\n",
+                "1. `final_temperature_pressure_correlation.png`\n",
+                "2. `final_pca_explained_variance.png`\n",
+                "3. `final_pca_component_loadings.png`\n",
+                "4. `final_clean_test_reconstruction_error.png`\n",
+                "5. `final_clean_test_anomaly_distribution.png`\n",
+                "6. `final_feature_residual_contributions.png`\n",
+                "7. `final_synthetic_spike_analysis.png`\n",
+                "8. `final_synthetic_drift_analysis.png`\n",
+                "9. `final_relationship_breaking_analysis.png`\n",
+                "10. `final_confusion_matrices.png`\n",
+                "11. `final_performance_comparison.png`\n",
+                "12. `final_event_detection_comparison.png`"
+            ]
+        },
+        {
+            "cell_type": "code",
+            "execution_count": None,
+            "metadata": {},
+            "outputs": [],
+            "source": [
+                "print('Pipeline execution completed across Phases 1 to 7.')\n",
+                "print('Ready for Phase 8: Final Project Archival and Submission Packaging.')"
+            ]
         }
     ],
     "metadata": {
@@ -684,4 +764,4 @@ nb_path = os.path.join("notebooks", "Chiller_PCA_Anomaly_Detection.ipynb")
 with open(nb_path, "w", encoding="utf-8") as f:
     json.dump(nb, f, indent=2)
 
-print(f"Jupyter Notebook updated successfully with Phases 1-6 at: {nb_path}")
+print(f"Jupyter Notebook updated successfully with Phases 1-7 at: {nb_path}")
